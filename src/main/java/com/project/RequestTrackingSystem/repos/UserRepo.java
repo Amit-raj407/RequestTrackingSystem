@@ -1,5 +1,13 @@
 package com.project.RequestTrackingSystem.repos;
 
-public interface UserRepo {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import com.project.RequestTrackingSystem.models.User;
+
+
+@Repository
+public interface UserRepo extends JpaRepository<User, Integer> {
+	public User findByUserEmail(String email);
+	public User findByUserName(String userName);
 }
