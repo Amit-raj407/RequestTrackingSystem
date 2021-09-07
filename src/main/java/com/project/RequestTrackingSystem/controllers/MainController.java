@@ -35,7 +35,7 @@ public class MainController {
 		User argUser = userSvc.validate(user);
 		if(argUser.getMsg().compareTo("Login Successful") == 0) {
 			model.addAttribute("user",argUser);
-			return "ruchi";
+			return "dashboard";
 		} else {
 			argUser.setIsInvalid(true);
 			argUser.setMsg(argUser.getMsg());
