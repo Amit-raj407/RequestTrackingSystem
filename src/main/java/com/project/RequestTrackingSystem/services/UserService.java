@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.RequestTrackingSystem.models.ChangePassword;
 import com.project.RequestTrackingSystem.models.User;
 import com.project.RequestTrackingSystem.repos.UserRepo;
 
@@ -62,6 +63,82 @@ public class UserService {
 		argUser.setMsg(msg);
 		return argUser;
 		
+		
+		
+	}
+	
+	
+	
+	public void save(User user) {
+		userRepo.save(user);
+	}
+	
+	
+	public boolean passwordValidator(String password) {
+		if(password.length() >= 8) {
+			
+			boolean upper = false;
+			boolean lower = false;
+			boolean numeric = false;
+			boolean special = false;
+			
+			for(int i = 0; i < password.length(); i++) {
+				int asciiVal = (int)password.charAt(i);
+				if( asciiVal >= 65 && asciiVal <= 90 ) {
+					upper = true;
+				}
+				else if( asciiVal >= 97 && asciiVal <= 122 ) {
+					lower = true;
+				}
+				else if( asciiVal >= 48 && asciiVal <= 57 ) {
+					numeric = true;
+				}
+				else {
+					special = true;
+				}	
+			}
+			
+			
+			if(special && numeric && lower && upper) {
+				return true;
+			} else {
+				return false;
+			}
+		
+		} else {
+			return false;
+		}
+	}
+	
+	
+	
+	public ChangePassword verifyPassword(ChangePassword pass) {
+		ChangePassword argPass = new ChangePassword();
+		String msg;
+		argPass.setUserId(pass.getUserId());
+		User user = userRepo.findById(pass.getUserId()).get();
+		if(user.getUserPassword().compareTo(pass.getOldPassword()) == 0) {
+			if(pass.getNewPassword().compareTo(pass.getConfirmPassword()) == 0) {
+				if(pass.getNewPassword().compareTo(pass.getOldPassword()) != 0) {
+					if(this.passwordValidator(pass.getNewPassword())) {
+						user.setUserPassword(pass.getNewPassword());
+						this.save(user);
+						msg = "Password Changed";
+					} else {
+						msg = "Weak Password!! <Password must contain upper case, lower case, numeric and special characters and should be"
+								+ "atleast 8 characters long> !!!";
+					}
+				} else {
+					msg = "New Password cannot be same as Old Password!!";
+				}
+			} else {
+				msg = "New Password and Confirm Password didnot match!!";
+			}
+		} else {
+			msg = "Old Password did not match with current password!!";
+		}
+		argPass.setMsg(msg);
+		return argPass;
 	}
 
 }

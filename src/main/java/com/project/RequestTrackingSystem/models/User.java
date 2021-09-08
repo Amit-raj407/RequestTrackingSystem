@@ -9,35 +9,41 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+
+
+
 @Entity
 @Table(name="user")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="user_id")
-	int userId;
+	private int userId;
 	@Column(name="username")
-	String userName;
+	private String userName;
 	
 	@Column(name="user_first_name")
-	String firstName;
+	private String firstName;
 	
 	@Column(name="user_last_name")
-	String lastName;
+	private String lastName;
 	
 	@Column(name="user_email")
-	String userEmail;
+	private String userEmail;
 	@Column(name="user_password")
-	String userPassword;
+	private String userPassword;
 	@Column(name="created_date")
-	LocalDate createdDate;
+	private LocalDate createdDate;
 	@Column(name="created_by")
-	String createdBy;
+	private String createdBy;
 	@Column(name="is_user_active")
-	Boolean userActive;
+	private Boolean userActive;
 	
-	Boolean isInvalid = false;
-	String msg = "";
+	private Boolean isInvalid = false;
+	private String msg = "";
+	
+	
 	
 	
 	public String getMsg() {
@@ -110,5 +116,6 @@ public class User {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
 	
 }

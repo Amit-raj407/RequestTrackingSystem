@@ -21,6 +21,11 @@
 			<a th:href="@{/}" class="btn btn-warning">Logout</a>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<a th:href="@{'/ChangePassword/' + ${user.userId}}">Update Password</a>
+		</div>
+	</div>
 </div>
 
 

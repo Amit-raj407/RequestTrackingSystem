@@ -5,9 +5,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.project.RequestTrackingSystem.models.ChangePassword;
 import com.project.RequestTrackingSystem.models.User;
 import com.project.RequestTrackingSystem.services.UserService;
+
+
+
 
 
 @Controller
@@ -38,12 +45,36 @@ public class MainController {
 			return "dashboard";
 		} else {
 			argUser.setIsInvalid(true);
-			argUser.setMsg(argUser.getMsg());
+			// argUser.setMsg(argUser.getMsg());
 			model.addAttribute("user",argUser);
 			System.out.println(argUser.getMsg()+argUser.getIsInvalid());
 			return "index";
 		}
 		
+	}
+	
+	@GetMapping("/ChangePassword/{id}")
+	public ModelAndView changePassword(@PathVariable(name = "id") int id, Model model) {
+		ModelAndView mav = new ModelAndView("change_password");
+		ChangePassword password = new ChangePassword();
+		password.setUserId(id);
+		mav.addObject("password", password);
+		
+		return mav;
+		
+		
+	}
+	
+	@PostMapping("/UpdatePassword")
+	public String updatePassword(@ModelAttribute("password") ChangePassword password, Model model) {
+		
+		
+		ChangePassword argPassword = userSvc.verifyPassword(password);
+		System.out.println(argPassword.getMsg());
+		model.addAttribute("message", argPassword.getMsg());
+		argPassword.setVisited(true);
+		model.addAttribute("password", argPassword);
+		return "change_password";
 	}
 	
 	
