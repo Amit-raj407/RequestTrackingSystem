@@ -1,7 +1,5 @@
 const inputs = document.querySelectorAll(".input");
 
-document.getElementById("warning-msg").style.display = "none";
-
 function addcl(){
 	let parent = this.parentNode.parentNode;
 	parent.classList.add("focus");
@@ -19,6 +17,11 @@ inputs.forEach(input => {
 	input.addEventListener("focus", addcl);
 	input.addEventListener("blur", remcl);
 });
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+document.getElementById("warning-msg").style.display = "none";
 
 function nullCheck(params) {
     if(params.trim()==='') {
@@ -39,6 +42,11 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
         // alert("UserName/Email cannot be empty");
 		document.getElementById("warning-msg").style.display = "block";
 		document.getElementById("warning-msg").innerHTML = "UserName/Email cannot be empty";
+		setTimeout(()=> {
+			document.getElementById("warning-msg").style.display = "none";
+		}, 4000);
+		
+		//document.getElementById("warning-msg").innerHTML = "UserName/Email cannot be empty";
         valid = 0;
     }
 
@@ -46,6 +54,10 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
         // alert("Password cannot be empty");
 		document.getElementById("warning-msg").style.display = "block";
 		document.getElementById("warning-msg").innerHTML = "Password cannot be empty";
+		setTimeout(() => {
+			document.getElementById("warning-msg").style.display = "none";
+		}, 4000);
+		//document.getElementById("warning-msg").innerHTML = "Password cannot be empty";
         valid = 0;
     }
 
@@ -57,14 +69,18 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
 
 
 
-document.getElementById("userName").addEventListener("focusout", () => {
+document.getElementById("userName").addEventListener("keyup", () => {
 	let userName = document.getElementById("userName").value;
 	if(userName.length <= 8) {
 		document.getElementById("warning-msg").style.display = "block";
 		document.getElementById("warning-msg").innerHTML = "UserName/Email length should be greater than 8";
 		document.getElementById("btn-submit").disabled = true;
+		document.getElementById("btn-submit").style.opacity = 0.5;
+		document.getElementById("btn-submit").style.cursor = not-allowed;
 	} else {
 		document.getElementById("warning-msg").style.display = "none";
 		document.getElementById("btn-submit").disabled = false;
+		document.getElementById("btn-submit").style.opacity = 1;
+		document.getElementById("btn-submit").style.cursor = pointer;
 	}
 })
