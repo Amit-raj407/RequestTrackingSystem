@@ -37,9 +37,13 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
 	let password = document.getElementById("password").value;
 
 	let valid = 1;
+	
+	document.getElementById("warning-msg").classList.add("alert");
+	document.getElementById("warning-msg").classList.add("alert-warning");
     
     if(nullCheck(userName) && valid == 1) {
         // alert("UserName/Email cannot be empty");
+		
 		document.getElementById("warning-msg").style.display = "block";
 		document.getElementById("warning-msg").innerHTML = "UserName/Email cannot be empty";
 		setTimeout(()=> {
@@ -52,6 +56,7 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
 
 	if(nullCheck(password) && valid == 1) {
         // alert("Password cannot be empty");
+		
 		document.getElementById("warning-msg").style.display = "block";
 		document.getElementById("warning-msg").innerHTML = "Password cannot be empty";
 		setTimeout(() => {
@@ -70,8 +75,12 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
 
 
 document.getElementById("userName").addEventListener("keyup", () => {
+	
+	document.getElementById("warning-msg").classList.add("alert");
+	document.getElementById("warning-msg").classList.add("alert-warning");
+	
 	let userName = document.getElementById("userName").value;
-	if(userName.length <= 8) {
+	if(userName.trim().length <= 8) {
 		document.getElementById("warning-msg").style.display = "block";
 		document.getElementById("warning-msg").innerHTML = "UserName/Email length should be greater than 8";
 		document.getElementById("btn-submit").disabled = true;

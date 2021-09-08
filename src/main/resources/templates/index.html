@@ -17,9 +17,10 @@
 		<img class="logo" th:src="@{/img/Cozentus-Logo.png}" src="">
 		<h1>Request Tracking System</h1>
 	</div>
+	
 	<img class="wave" th:src="@{/img/wave_blue.png}" src="">
 	<div class="alert alert-warning text-center" th:if="${user.isInvalid}" th:text="${user.msg}"></div>
-	<div id="warning-msg" class="alert alert-warning text-center"></div>
+	<div id="warning-msg"></div>
 	<div class="container">
 	
 		<div class="img">
