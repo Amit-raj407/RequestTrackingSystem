@@ -162,7 +162,7 @@ public class UserService {
 						msg = "Password Changed Successfully";
 					} else {
 						msg = "Weak Password!! <Password must contain upper case, lower case, numeric and special characters and should be"
-								+ "atleast 8 characters long> !!!";
+								+ " atleast 8 characters long> !!!";
 					}
 				} else {
 					msg = "New Password cannot be same as old password";
