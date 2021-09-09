@@ -171,7 +171,12 @@ public class UserService {
 				msg = "New Password and Confirm Password did not match!!";
 			}
 		} else {
-			msg = "Email does not exist";
+			if(isEmail) {
+				msg = "Email does not exist";
+			}else {
+				msg="Username does not exist";
+			}
+			
 		}
 		
 		argPass.setMsg(msg);

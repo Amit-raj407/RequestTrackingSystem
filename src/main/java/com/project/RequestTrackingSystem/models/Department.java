@@ -30,10 +30,18 @@ public class Department {
 	private String deptActive;
 	
 	
+	@Transient
+	private int userId;
 	
 	
 	
 	
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 	public String getDeptActive() {
 		return deptActive;
 	}
@@ -41,8 +49,7 @@ public class Department {
 		this.deptActive = deptActive;
 	}
 	
-	@Transient
-	private String msg;
+	
 	
 	
 	public int getId() {

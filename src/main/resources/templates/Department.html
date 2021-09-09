@@ -36,13 +36,16 @@
                     <form action="#" th:action="@{/saveDept}" th:object="${dept}"
                             method="post">
                        <div class="mb-3 mt-3">
+						<input type="hidden" th:field="*{userId}" class="form-control" id="exampleFormControlInput1" readonly="readonly">
+					   </div>
+                       <div class="mb-3 mt-3">
                         <input type="text" th:field="*{deptCode}" class="form-control" id="DeptCode" placeholder="Department Code">
                        </div>
                        <div class="mb-3">
                         <input type="text" th:field="*{parentDepartmentCode}" class="form-control" id="ParentDeptCode" placeholder="Parent Department Code">
                        </div>
                        <div class="mb-3">
-                        <input type="text" th:field="*{departmentName}" class="form-control" id="DeptNme" placeholder="Department Name">
+                        <input type="text" th:field="*{departmentName}" class="form-control" id="DeptName" placeholder="Department Name">
                        </div>
                        <div class="row mb-3"  >
                            <div class="col-md-6">
@@ -64,7 +67,7 @@
                             <input id="btn-submit" type="submit" class="btn btn-success" value="Save">
                         </div>
                         <div class="btn">
-                            <input id="btn-submit" type="reset" class="btn btn-danger" value="Cancel">
+                            <input   class="btn btn-danger" value="Cancel">
                         </div>
                      </form>
                      <div class="text-center text-danger" th:text="${message}"></div>
@@ -72,10 +75,10 @@
             </div>
         </div>
         </div>
-        <script src="../static/js/DeptManage.js">
+       
             
-        </script>
-        <!-- <script type="text/javascript" th:inline="javascript" th:src="@{/js/ChangePasswordScript.js}" ></script>  -->
+        
+         <script type="text/javascript" th:inline="javascript" th:src="@{/js/DeptValidation.js}" ></script>  
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
         
 </body>

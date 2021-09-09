@@ -99,9 +99,10 @@ public class MainController {
 	}
 	
 	
-	@GetMapping("/Dept")
-	public String serveDepartment(Model model) {
+	@GetMapping("/Dept/{id}")
+	public String serveDepartment(@PathVariable(name = "id") int id, Model model) {
 		Department dept=new Department();
+		dept.setUserId(id);
 		model.addAttribute("dept",dept);
 		return "Department";
 	}
