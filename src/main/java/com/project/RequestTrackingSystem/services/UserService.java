@@ -140,5 +140,42 @@ public class UserService {
 		argPass.setMsg(msg);
 		return argPass;
 	}
+	
+	public ChangePassword changeAnyPassword(ChangePassword pass) {
+		ChangePassword argPass = new ChangePassword();
+		String msg;
+		boolean isEmail = validateEmail(pass.getEmailName());
+		User user;
+		
+		if(isEmail) {
+			user = userRepo.findByUserEmail(pass.getEmailName());		
+		} else {
+			user = userRepo.findByUserName(pass.getEmailName());	
+		}
+		
+		if(user != null) {
+			if(pass.getNewPassword().compareTo(pass.getConfirmPassword()) == 0) {
+				if(pass.getNewPassword().compareTo(user.getUserPassword()) != 0) {
+					if(this.passwordValidator(pass.getNewPassword())) {
+						user.setUserPassword(pass.getNewPassword());
+						userRepo.save(user);
+						msg = "Password Changed Successfully";
+					} else {
+						msg = "Weak Password!! <Password must contain upper case, lower case, numeric and special characters and should be"
+								+ "atleast 8 characters long> !!!";
+					}
+				} else {
+					msg = "New Password cannot be same as old password";
+				}
+			} else {
+				msg = "New Password and Confirm Password did not match!!";
+			}
+		} else {
+			msg = "Email does not exist";
+		}
+		
+		argPass.setMsg(msg);
+		return argPass;
+	}
 
 }

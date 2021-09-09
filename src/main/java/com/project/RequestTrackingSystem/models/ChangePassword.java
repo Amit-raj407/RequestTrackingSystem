@@ -1,15 +1,9 @@
 package com.project.RequestTrackingSystem.models;
 
-import com.sun.istack.NotNull;
-
-import lombok.Data;
-
-
-@Data
 
 public class ChangePassword {
 	
-	@NotNull
+	
 	private String oldPassword;
 	private String newPassword;
 	private String confirmPassword;
@@ -17,6 +11,14 @@ public class ChangePassword {
 	private String msg = "";
 	private boolean isVisited = false;
 	
+	private String emailName;
+	
+	public String getEmailName() {
+		return emailName;
+	}
+	public void setEmailName(String emailName) {
+		this.emailName = emailName;
+	}
 	public boolean getVisited() {
 		return isVisited;
 	}
