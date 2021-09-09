@@ -1,6 +1,6 @@
 package com.project.RequestTrackingSystem.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.RequestTrackingSystem.models.ChangePassword;
+import com.project.RequestTrackingSystem.models.Department;
 import com.project.RequestTrackingSystem.models.User;
+import com.project.RequestTrackingSystem.services.DeptService;
 import com.project.RequestTrackingSystem.services.UserService;
 
 
@@ -20,13 +22,15 @@ import com.project.RequestTrackingSystem.services.UserService;
 @Controller
 public class MainController {
 	
-	@Autowired
+	
 	private UserService userSvc;
+	private DeptService deptSvc;
 	
 
 	
-	public MainController(UserService userSvc) {
-		this.userSvc=userSvc;
+	public MainController(UserService userSvc, DeptService deptSvc) {
+		this.userSvc = userSvc;
+		this.deptSvc = deptSvc;
 	}
 	 
 	@GetMapping("/")
@@ -92,6 +96,23 @@ public class MainController {
 		model.addAttribute("message", argPassword.getMsg());
 		model.addAttribute("password", argPassword);
 		return "ChangeAnyPassword";
+	}
+	
+	
+	@GetMapping("/Dept")
+	public String serveDepartment(Model model) {
+		Department dept=new Department();
+		model.addAttribute("dept",dept);
+		return "Department";
+	}
+	
+	@PostMapping("/saveDept")
+	public String saveDept(@ModelAttribute("dept") Department dept, Model model) {
+		System.out.println("Save Dept");
+		String msg = deptSvc.save(dept);
+		System.out.println(msg);
+		model.addAttribute("message", msg);
+		return "Department";
 	}
 	
 	

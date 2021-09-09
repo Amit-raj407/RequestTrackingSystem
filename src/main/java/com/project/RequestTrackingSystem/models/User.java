@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 
@@ -40,7 +41,10 @@ public class User {
 	@Column(name="is_user_active")
 	private Boolean userActive;
 	
+	@Transient
 	private Boolean isInvalid = false;
+	
+	@Transient
 	private String msg = "";
 	
 	
