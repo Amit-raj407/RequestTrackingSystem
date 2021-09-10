@@ -115,5 +115,20 @@ public class MainController {
 		return "Department";
 	}
 	
+	@GetMapping("/CreateRequest")
+	public String getCreateRequest(Model model) {
+//		 = new ChangePassword();
+//		model.addAttribute("password" ,password);
+		return "insertEdit";
+	}
+	
+	@GetMapping("/Homepage")
+	public String getHomepage(Model model) {
+//		 = new ChangePassword();
+//		model.addAttribute("password" ,password);
+		return "Homepage";
+	}
+	
+	
 	
 }
