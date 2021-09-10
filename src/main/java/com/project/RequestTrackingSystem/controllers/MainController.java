@@ -54,7 +54,6 @@ public class MainController {
 			System.out.println(argUser.getMsg()+argUser.getIsInvalid());
 			return "index";
 		}
-		
 	}
 	
 	
