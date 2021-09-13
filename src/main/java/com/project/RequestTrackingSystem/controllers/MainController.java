@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.RequestTrackingSystem.models.ChangePassword;
@@ -20,6 +21,8 @@ import com.project.RequestTrackingSystem.models.User;
 import com.project.RequestTrackingSystem.services.DeptService;
 import com.project.RequestTrackingSystem.services.RequestService;
 import com.project.RequestTrackingSystem.services.UserService;
+
+
 
 
 
@@ -164,6 +167,18 @@ public class MainController {
 		return "Homepage";
 	}
 	
+	@GetMapping("/EditRequest/{id}")
+	public ModelAndView showEditRequestPage(@PathVariable(name = "id") int id) {
+		ModelAndView mav = new ModelAndView("EditRequest");
+//		Product product = service.get(id);
+		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllDeptId();
+		
+		Requests request = this.reqSvc.getRequestByID(id);
+		mav.addObject("deptIds", deptIdsAndCodes);
+		mav.addObject("request", request);
+		
+		return mav;
+	}
 	
 	
 }

@@ -88,4 +88,8 @@ public class RequestService {
 		List<Requests> allRequests = this.reqRepo.findAll();
 		return allRequests;
 	}
+
+	public Requests getRequestByID(int id) {
+		return this.reqRepo.getById(id);
+	}
 }
