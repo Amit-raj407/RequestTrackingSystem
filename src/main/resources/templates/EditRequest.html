@@ -25,7 +25,7 @@
 			
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label for="rqstTitle">Request Title</label>
+                    <label for="rqstTitle">Request Title*</label>
                 </div>
                 <div class="col-md-9">
                     <input type="text" class="form-control" name="" th:field="*{requestTitle}"  id="rqstTitle" placeholder="Request Title">
@@ -33,7 +33,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label for="rqstDesc">Request Description</label>
+                    <label for="rqstDesc">Request Description*</label>
                 </div>
                 <div class="col-md-9">
                     <input type="text" class="form-control" name="" id="rqstDesc" th:field="*{requestDescription}" placeholder="Request Description">
@@ -41,7 +41,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label for="deptSelect">Assigned To Dept</label>
+                    <label for="deptSelect">Assigned To Dept*</label>
                 </div>
                
                 <div class="col-md-9">
@@ -53,7 +53,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label for="userSelect">Assigned To User</label>
+                    <label for="userSelect">Assigned To User*</label>
                 </div>
                 <div class="col-md-9">
                     <select class="form-select" th:field="*{assignedTo}" name="" id="userSelect">
@@ -70,17 +70,17 @@
                     <label for="rqstNum">Request Number</label>
                 </div>
                 <div class="col-md-4">
-                    <input class="form-control" type="text" name="rqstNum" id="" th:value="${'Auto Generated'}"  readonly>
+                    <input class="form-control" type="text" name="rqstNum" id="" th:field="*{requestNumber}" readonly>
                 </div>
                 <div class="col-md-2 text-center">
-                    <label for="status">Status</label>
+                    <label for="status">Status*</label>
                 </div>
                 <div class="col-md-3">
                     <select name="" id="status" class="form-select">
                         <option value="none" selected disabled>-Select-</option>
-                        <option value="">Status1</option>
-                        <option value="">Status2</option>
-                        <option value="">Status3</option>
+                        <option value="">Pending</option>
+                        <option value="">In Progress</option>
+                        <option value="">Completed</option>
                     </select>
                 </div>
             </div>

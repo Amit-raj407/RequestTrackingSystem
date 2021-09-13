@@ -26,6 +26,11 @@ public class DeptService {
 		List<Department> d;
 		String msg;
 		dept.setCreatedBy(userRepo.getById(dept.getUserId()).getFirstName());
+		
+		if(dept.getParentDepartmentCode().compareTo("none") == 0) {
+			dept.setParentDepartmentCode(dept.getDeptCode());
+		}
+		
 		if(this.deptRepo == null) {
 			if(dept.getDeptCode().compareTo(dept.getParentDepartmentCode()) == 0) {
 				deptRepo.save(dept);

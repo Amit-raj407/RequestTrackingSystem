@@ -14,7 +14,7 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
 	let rqstDesc = document.getElementById("rqstDesc").value;
 	let deptSelect = document.getElementById("deptSelect").value;
 	let userSelect = document.getElementById("userSelect").value;
-	let comments = document.getElementById("comments").value;
+	let status = document.getElementById("status").value;
 
 
 	
@@ -23,11 +23,22 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
 	
 	document.getElementById("warning-msg").classList.add("alert");
 	document.getElementById("warning-msg").classList.add("alert-warning");
+	document.getElementById("warning-msg").classList.add("text-center");
+	
+	if(nullCheck(rqstTitle) && nullCheck(rqstDesc) && valid == 1) {
+		document.getElementById("warning-msg").style.display = "block";
+		document.getElementById("warning-msg").innerHTML = "Please Enter All The Required* Fields";
+		setTimeout(()=> {
+			document.getElementById("warning-msg").style.display = "none";
+		}, 4000);
+		
+        valid = 0;
+	}
     
     if(nullCheck(rqstTitle) && valid == 1) {
 		
 		document.getElementById("warning-msg").style.display = "block";
-		document.getElementById("warning-msg").innerHTML = "Please enter request title field";
+		document.getElementById("warning-msg").innerHTML = "Please Enter Request Title Field";
 		setTimeout(()=> {
 			document.getElementById("warning-msg").style.display = "none";
 		}, 4000);
@@ -38,7 +49,7 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
 	if(nullCheck(rqstDesc) && valid == 1) {
 		
 		document.getElementById("warning-msg").style.display = "block";
-		document.getElementById("warning-msg").innerHTML = "Please enter request Description field";
+		document.getElementById("warning-msg").innerHTML = "Please Enter Request Description Field";
 		setTimeout(()=> {
 			document.getElementById("warning-msg").style.display = "none";
 		}, 4000);
@@ -60,7 +71,7 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
 	if(userSelect=="none" && valid == 1) {
 		
 		document.getElementById("warning-msg").style.display = "block";
-		document.getElementById("warning-msg").innerHTML = "Please Select A User iD";
+		document.getElementById("warning-msg").innerHTML = "Please Select A User ID";
 		setTimeout(()=> {
 			document.getElementById("warning-msg").style.display = "none";
 		}, 4000);
@@ -68,16 +79,17 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
         valid = 0;
     }
 
-	if(nullCheck(comments) && valid == 1) {
+	if(status == "none" && valid == 1) {
 		
 		document.getElementById("warning-msg").style.display = "block";
-		document.getElementById("warning-msg").innerHTML = "Please Give Some Comments";
+		document.getElementById("warning-msg").innerHTML = "Please Select A Status";
 		setTimeout(()=> {
 			document.getElementById("warning-msg").style.display = "none";
 		}, 4000);
 		
         valid = 0;
     }
+
 
 	if(valid == 0) {
 		e.preventDefault();

@@ -23,7 +23,7 @@
 	
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label for="rqstTitle">Request Title</label>
+                    <label for="rqstTitle">Request Title<span class="text-danger">*</span></label>
                 </div>
                 <div class="col-md-9">
                     <input type="text" class="form-control" name="" th:field="*{requestTitle}"  id="rqstTitle" placeholder="Request Title">
@@ -31,7 +31,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label for="rqstDesc">Request Description</label>
+                    <label for="rqstDesc">Request Description<span class="text-danger">*</span></label>
                 </div>
                 <div class="col-md-9">
                     <input type="text" class="form-control" name="" id="rqstDesc" th:field="*{requestDescription}" placeholder="Request Description">
@@ -39,23 +39,23 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label for="deptSelect">Assigned To Dept</label>
+                    <label for="deptSelect">Assigned To Dept<span class="text-danger">*</span></label>
                 </div>
                
                 <div class="col-md-9">
                     <select class="form-select" name="" th:field="*{requestDept}" id="deptSelect">
-                    	<option value="0" selected disabled>-Select-</option>
+                    	<option th:value="none">-Select-</option>
                         <option th:each="id : ${deptIds}" th:text = "${id.value}" th:value="${id.key}"></option> 
                     </select>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label for="userSelect">Assigned To User</label>
+                    <label for="userSelect">Assigned To User<span class="text-danger">*</span></label>
                 </div>
                 <div class="col-md-9">
                     <select class="form-select" th:field="*{assignedTo}" name="" id="userSelect">
-                        <option value="none" selected disabled>-Select-</option>
+                        <option value="none">-Select-</option>
                         <option value="user1">user1</option>
                         <option value="user2">user2</option>
                         <option value="user3">user3</option>
@@ -71,7 +71,7 @@
                     <input class="form-control" type="text" name="rqstNum" id="" th:value="${'Auto Generated'}"  readonly>
                 </div>
                 <div class="col-md-2 text-center">
-                    <label for="status">Status</label>
+                    <label for="status">Status<span class="text-danger">*</span></label>
                 </div>
                 <div class="col-md-3">
                     <select name="" id="status" class="form-select">

@@ -33,6 +33,16 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
         valid = 0;
     }
 
+
+	if((DeptCode.length < 4 || DeptCode.length > 6) && valid == 1) {
+		document.getElementById("warning-msg").style.display = "block";
+        document.getElementById("warning-msg").innerHTML = "Department Code length should be between 4 and 6";
+        setTimeout(() => {
+            document.getElementById("warning-msg").style.display = "none";
+        }, 4000);
+        valid = 0;
+	}  
+
     if(nullCheck(ParentDeptCode) && valid == 1) {
         document.getElementById("warning-msg").style.display = "block";
         document.getElementById("warning-msg").innerHTML = "Parent Department Code cannot be empty";

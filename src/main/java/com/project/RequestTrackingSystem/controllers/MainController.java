@@ -113,6 +113,14 @@ public class MainController {
 	public String serveDepartment(@PathVariable(name = "id") int id, Model model) {
 		Department dept=new Department();
 		dept.setUserId(id);
+		
+		
+//		Get All Dept Codes to display in parent deptCode
+		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllDeptId();
+	
+		
+		
+		model.addAttribute("deptIds", deptIdsAndCodes);
 		model.addAttribute("dept",dept);
 		return "Department";
 	}
@@ -122,6 +130,14 @@ public class MainController {
 		System.out.println("Save Dept");
 		String msg = deptSvc.save(dept);
 		System.out.println(msg);
+		
+		
+		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllDeptId();
+	
+		
+		
+		model.addAttribute("deptIds", deptIdsAndCodes);
+		model.addAttribute("dept", dept);
 		model.addAttribute("message", msg);
 		return "Department";
 	}
@@ -130,10 +146,7 @@ public class MainController {
 	public String getCreateRequest(Model model) {
 		Requests request=new Requests();
 		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllDeptId();
-		
-//		for(String code : deptCodes) {
-//			System.out.println(code);
-//		}
+	
 		
 		
 		model.addAttribute("deptIds", deptIdsAndCodes);
@@ -151,6 +164,7 @@ public class MainController {
 	        } else {
 	        	String msg = "Some Error Occured!! Please try again";
 	        	model.addAttribute("message",msg);
+	        	model.addAttribute("request",request);
 	        	return "CreateRequest";
 	        }
 	        
