@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,8 +19,7 @@ public class RequestsComments {
 @GeneratedValue(strategy = GenerationType.AUTO)
 @Column(name="request_comment_id")
 private int requestCommentId;
-@Column(name="request_id")
-private int requestId;
+
 @Column(name="request_sequence_no")
 private int requestSequenceNo;
 @Column(name="request_comment")
@@ -27,6 +28,11 @@ private String requestComment;
 private LocalDate createdDate;
 @Column(name="created_by")
 private String createdBy;
+
+@ManyToOne(targetEntity = Requests.class)
+@JoinColumn(name="requestId")
+private int requestId;
+
 public int getRequestCommentId() {
 return requestCommentId;
 }

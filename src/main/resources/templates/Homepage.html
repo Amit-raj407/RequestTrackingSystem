@@ -24,6 +24,7 @@
                 <input type="search" class="form-control" name="" id="search" placeholder="Search..">
             </div>
         </div>
+        
         <table class="table">
             <thead>
               <tr>
@@ -37,24 +38,17 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Mark</td>
-                <td><a th:href="@{'/CreateRequest'}">Req Title</a></td>
-                <td>@mdo</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>Otto</td>
+              <tr th:each="request : ${allRequests}">
+                <td th:text = "${request.requestNumber}"></td>
+                <td><a th:text = "${request.requestTitle}" th:href="@{'/CreateRequest'}"></a></td>
+                <td>Pending(Static)</td>
+                <td th:text = "${request.assignedTo}">Mark</td>
+                <td>Yet to be Done</td>
+                <td>Yet to be Done</td>
                 
               </tr>
-              <tr>
-                <td>Mark</td>
-                <td><a th:href="@{'/CreateRequest'}">Req Title</a></td>
-                <td>@mdo</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>Otto</td>
-                
-              </tr>
+             
+             
     
             </tbody>
           </table>

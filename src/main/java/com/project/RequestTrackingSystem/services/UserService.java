@@ -156,13 +156,13 @@ public class UserService {
 		if(user != null) {
 			if(pass.getNewPassword().compareTo(pass.getConfirmPassword()) == 0) {
 				if(pass.getNewPassword().compareTo(user.getUserPassword()) != 0) {
-					if(this.passwordValidator(pass.getNewPassword())) {
+					String passwordMsg = this.isPasswordValid(pass.getNewPassword());
+					if(passwordMsg.compareTo("Strong") == 0) {
 						user.setUserPassword(pass.getNewPassword());
 						userRepo.save(user);
 						msg = "Password Changed Successfully";
 					} else {
-						msg = "Weak Password!! <Password must contain upper case, lower case, numeric and special characters and should be"
-								+ " atleast 8 characters long> !!!";
+						msg = passwordMsg;
 					}
 				} else {
 					msg = "New Password cannot be same as old password";
@@ -182,5 +182,90 @@ public class UserService {
 		argPass.setMsg(msg);
 		return argPass;
 	}
+	
+	public String isPasswordValid(String samplepassword)
+    {
+        int integercheck=0;
+        int capitalcheck=0;
+        int smallcheck=0;
+        boolean valid=true;
+        String msg = "Strong";
+
+        if (!((samplepassword.length() >= 8) && (samplepassword.length() <= 20)) && valid) {
+            msg = "Password Length must be of 8 characer long";
+            valid=false;
+
+        }
+
+        if (samplepassword.contains(" ") && valid) {
+            msg = "Password Must Not Contain a Space";
+            valid=false;
+        }
+
+        
+        if (true) {
+            for (int i = 0; i <= 9; i++) {
+
+                String str1 = Integer.toString(i);
+
+                if (samplepassword.contains(str1)) {
+                    integercheck = 1;
+                }
+            }
+            if ((integercheck == 0) && valid) {
+                msg = "Password Must Contain a Numeric Value";
+                valid=false;            }
+        }
+
+        if (!(samplepassword.contains("@") || samplepassword.contains("#")
+            || samplepassword.contains("!") || samplepassword.contains("$") 
+            || samplepassword.contains("*") || samplepassword.contains("&")
+            || samplepassword.contains(".")) && valid) {
+            msg = "Password Must contain a special Character";
+            valid=false;        }
+
+        if (true) {
+            for (int i = 65; i <= 90; i++) {
+
+                char c = (char)i;
+
+                String str1 = Character.toString(c);
+                if (samplepassword.contains(str1)) {
+                    capitalcheck = 1;
+                }
+            }
+            if ((capitalcheck == 0) && valid) {
+                msg = "Password Must Contain Capital Letter";
+                valid=false;
+            }
+        }
+
+        if (true) {
+            for (int i = 97; i <= 122; i++) {
+
+                char c = (char)i;
+                String str1 = Character.toString(c);
+
+                if (samplepassword.contains(str1)) {
+                    smallcheck = 1;
+                }
+            }
+            if ((smallcheck == 0) && valid){
+                msg = "Password Must Contain a Small Character";
+                valid=false;
+            }
+        }
+        
+        
+        if (valid==true){
+//        	If password satisfies all the conditions... <Good Password>
+        	msg = "Strong";
+            return msg;
+        }else{
+        	
+//        	If password did not satisfy any of the condition
+            return msg;
+        }
+    }
 
 }

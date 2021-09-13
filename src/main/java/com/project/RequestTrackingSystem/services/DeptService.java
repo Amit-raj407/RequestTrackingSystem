@@ -1,6 +1,8 @@
 package com.project.RequestTrackingSystem.services;
 
+
 import java.util.List;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,5 +54,21 @@ public class DeptService {
 		}
 		
 		return msg;
+	}
+	
+	public TreeMap<Integer, String> getAllDeptId() {
+		
+		List<Department> getAllDept = deptRepo.findAll();
+		
+//		To store Departments in sorted order according to DeptID
+		TreeMap<Integer, String> treeMapDeptCodes = new TreeMap<Integer, String>();
+		
+		for(Department codes : getAllDept) {
+			
+			treeMapDeptCodes.put(codes.getDeptId(), codes.getDeptCode());
+		}
+		
+		System.out.println(treeMapDeptCodes);
+		return treeMapDeptCodes;
 	}
 }

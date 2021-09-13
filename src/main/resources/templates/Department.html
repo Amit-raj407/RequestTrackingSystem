@@ -53,9 +53,8 @@
                            </div>
                            <div class="col-md-6">
                             <select id= "Active" th:field="*{deptActive}" class="form-control">
-                                <option value="" selected disabled>-Select-</option>
-                                <option th:value=true th:text="True"></option>
-                                <option th:value=false th:text="False"></option>
+                                <option th:value="1">True</option>
+                                <option th:value="0">False</option>
                             </select>
                            </div>
                         

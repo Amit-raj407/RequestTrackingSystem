@@ -1,6 +1,10 @@
 package com.project.RequestTrackingSystem.controllers;
 
 
+
+import java.util.List;
+import java.util.TreeMap;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +15,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.project.RequestTrackingSystem.models.ChangePassword;
 import com.project.RequestTrackingSystem.models.Department;
+import com.project.RequestTrackingSystem.models.Requests;
 import com.project.RequestTrackingSystem.models.User;
 import com.project.RequestTrackingSystem.services.DeptService;
+import com.project.RequestTrackingSystem.services.RequestService;
 import com.project.RequestTrackingSystem.services.UserService;
 
 
@@ -25,12 +31,14 @@ public class MainController {
 	
 	private UserService userSvc;
 	private DeptService deptSvc;
+	private RequestService reqSvc;
 	
 
 	
-	public MainController(UserService userSvc, DeptService deptSvc) {
+	public MainController(UserService userSvc, DeptService deptSvc,RequestService reqSvc) {
 		this.userSvc = userSvc;
 		this.deptSvc = deptSvc;
+		this.reqSvc = reqSvc;
 	}
 	 
 	@GetMapping("/")
@@ -117,15 +125,42 @@ public class MainController {
 	
 	@GetMapping("/CreateRequest")
 	public String getCreateRequest(Model model) {
-//		 = new ChangePassword();
-//		model.addAttribute("password" ,password);
-		return "insertEdit";
+		Requests request=new Requests();
+		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllDeptId();
+		
+//		for(String code : deptCodes) {
+//			System.out.println(code);
+//		}
+		
+		
+		model.addAttribute("deptIds", deptIdsAndCodes);
+        model.addAttribute("request",request);
+        return "CreateRequest";
 	}
+	
+	 @PostMapping("/saveRequest")
+	    public String saveRqst(@ModelAttribute("request") Requests request, Model model) {
+	        System.out.println("Save Request");
+	        int status = this.reqSvc.saveRequest(request);
+	        
+	        if(status == 1) {
+	        	return "redirect:/Homepage";
+	        } else {
+	        	String msg = "Some Error Occured!! Please try again";
+	        	model.addAttribute("message",msg);
+	        	return "CreateRequest";
+	        }
+	        
+//	        System.out.println(msg);
+//	        model.addAttribute("message", msg);
+	        
+	  }
 	
 	@GetMapping("/Homepage")
 	public String getHomepage(Model model) {
-//		 = new ChangePassword();
-//		model.addAttribute("password" ,password);
+
+		List<Requests> allRequests = reqSvc.getAllRequests();
+		model.addAttribute("allRequests", allRequests);
 		return "Homepage";
 	}
 	

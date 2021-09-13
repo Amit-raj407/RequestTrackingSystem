@@ -19,14 +19,14 @@
     </div>
     <div class="container mt-3">
         <h1 class="text-center bg-light mb-3">Create / Edit Request</h1>
-	<!--<form action="#" th:action="@{/HomePage}" th:object="${request}" method="post" autocomplete="off">-->
-	<form action="#">
+		<form action="#" th:action="@{/saveRequest}" th:object="${request}" method="post" autocomplete="off">
+	
             <div class="row mb-3">
                 <div class="col-md-3">
                     <label for="rqstTitle">Request Title</label>
                 </div>
                 <div class="col-md-9">
-                    <input type="text" class="form-control" name="" id="rqstTitle" placeholder="Request Title">
+                    <input type="text" class="form-control" name="" th:field="*{requestTitle}"  id="rqstTitle" placeholder="Request Title">
                 </div>
             </div>
             <div class="row mb-3">
@@ -34,19 +34,18 @@
                     <label for="rqstDesc">Request Description</label>
                 </div>
                 <div class="col-md-9">
-                    <input type="text" class="form-control" name="" id="rqstDesc" placeholder="Request Description">
+                    <input type="text" class="form-control" name="" id="rqstDesc" th:field="*{requestDescription}" placeholder="Request Description">
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-3">
                     <label for="deptSelect">Assigned To Dept</label>
                 </div>
+               
                 <div class="col-md-9">
-                    <select class="form-select" name="" id="deptSelect">
-                        <option value="none" selected disabled>-Select-</option>
-                        <option value="">dept1</option>
-                        <option value="">dept2</option>
-                        <option value="">dept3</option>
+                    <select class="form-select" name="" th:field="*{requestDept}" id="deptSelect">
+                    	<option value="0" selected disabled>-Select-</option>
+                        <option th:each="id : ${deptIds}" th:text = "${id.value}" th:value="${id.key}"></option> 
                     </select>
                 </div>
             </div>
@@ -55,11 +54,11 @@
                     <label for="userSelect">Assigned To User</label>
                 </div>
                 <div class="col-md-9">
-                    <select class="form-select" name="" id="userSelect">
+                    <select class="form-select" th:field="*{assignedTo}" name="" id="userSelect">
                         <option value="none" selected disabled>-Select-</option>
-                        <option value="">user1</option>
-                        <option value="">user2</option>
-                        <option value="">user3</option>
+                        <option value="user1">user1</option>
+                        <option value="user2">user2</option>
+                        <option value="user3">user3</option>
                     </select>
                 </div>
             </div>
@@ -69,7 +68,7 @@
                     <label for="rqstNum">Request Number</label>
                 </div>
                 <div class="col-md-4">
-                    <input class="form-control" type="text" name="rqstNum" id="" readonly>
+                    <input class="form-control" type="text" name="rqstNum" id="" th:value="${'Auto Generated'}"  readonly>
                 </div>
                 <div class="col-md-2 text-center">
                     <label for="status">Status</label>
@@ -89,7 +88,7 @@
                 </div>
                 <div class="col-md-9">
                     <!-- <input class="form-control" type="text" name="" id="comments" placeholder="Comments"> -->
-                    <textarea class="form-control" name="" id="comments" placeholder="Comments"></textarea>
+                    <textarea class="form-control" name="" id="comments" th:field="*{initialComments}"  placeholder="Comments"></textarea>
                 </div>
             </div>
             <div class="row text-center mb-3">
@@ -102,6 +101,7 @@
             </div>
         </form>
         <div id="warning-msg"></div>
+        <div class="text-center text-danger" th:text="${message}"></div>
     </div>
         <script type="text/javascript" th:inline="javascript" th:src="@{/js/request.js}" ></script>
     

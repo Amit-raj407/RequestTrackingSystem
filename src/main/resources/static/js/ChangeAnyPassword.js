@@ -19,6 +19,16 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
 	document.getElementById("warning-msg").classList.add("alert");
 	document.getElementById("warning-msg").classList.add("alert-warning");
     
+	if(nullCheck(nameEmail) && nullCheck(newPassword) && nullCheck(confirmPassword) && valid == 1) {
+		document.getElementById("warning-msg").style.display = "block";
+		document.getElementById("warning-msg").innerHTML = "Please Enter All the Fields";
+		setTimeout(()=> {
+			document.getElementById("warning-msg").style.display = "none";
+		}, 4000);
+		
+        valid = 0;
+	}
+
     if(nullCheck(nameEmail) && valid == 1) {
         
 		
