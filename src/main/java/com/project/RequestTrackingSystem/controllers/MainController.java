@@ -5,6 +5,7 @@ package com.project.RequestTrackingSystem.controllers;
 import java.util.List;
 import java.util.TreeMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,18 +32,18 @@ import com.project.RequestTrackingSystem.services.UserService;
 @Controller
 public class MainController {
 	
-	
+	@Autowired
 	private UserService userSvc;
+	
+	@Autowired
 	private DeptService deptSvc;
+	
+	@Autowired
 	private RequestService reqSvc;
 	
 
 	
-	public MainController(UserService userSvc, DeptService deptSvc,RequestService reqSvc) {
-		this.userSvc = userSvc;
-		this.deptSvc = deptSvc;
-		this.reqSvc = reqSvc;
-	}
+	
 	 
 	@GetMapping("/")
 	public String serveLogin(Model model) {
@@ -147,8 +148,6 @@ public class MainController {
 		Requests request=new Requests();
 		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllDeptId();
 	
-		
-		
 		model.addAttribute("deptIds", deptIdsAndCodes);
         model.addAttribute("request",request);
         return "CreateRequest";

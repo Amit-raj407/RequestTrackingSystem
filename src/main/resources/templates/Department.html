@@ -41,7 +41,7 @@
 					<h1 class="text-center">Manage Department</h1>
 				</div>
 				<form action="#" th:action="@{/saveDept}" th:object="${dept}"
-					method="post">
+					method="post" autocomplete="off">
 					<div class="mb-3 mt-3">
 						<input type="hidden" th:field="*{userId}" class="form-control"
 							id="exampleFormControlInput1" readonly="readonly">
@@ -61,7 +61,7 @@
 					<div class="mb-3">
 						<input th:field="*{parentDepartmentCode}" class="form-control" list="datalistOptions"
 							id="ParentDeptCode" placeholder="Parent Department Code">
-						<datalist id="datalistOptions" style="overflow-y: auto!important">
+						<datalist id="datalistOptions">
 							<option th:value="none">New Parent Department</option>
 							<option th:each="id : ${deptIds}" th:text = "${id.value}" th:value="${id.value}"></option>
 						</datalist>

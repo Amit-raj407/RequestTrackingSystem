@@ -39,8 +39,8 @@
             </thead>
             <tbody>
               <tr th:each="request : ${allRequests}">
-                <td th:text = "${request.requestNumber}"></td>
-                <td><a th:text = "${request.requestTitle}" th:href="@{'/EditRequest/' + ${request.requestId}}"></a></td>
+                <td><a th:text = "${request.requestNumber}" th:href="@{'/EditRequest/' + ${request.requestId}}"></a></td>
+                <td th:text = "${request.requestTitle}"></td>
                 <td>Pending(Static)</td>
                 <td th:text = "${request.assignedTo}">Mark</td>
                 <td>Yet to be Done</td>
