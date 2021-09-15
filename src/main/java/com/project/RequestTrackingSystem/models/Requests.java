@@ -53,6 +53,15 @@ public class Requests {
 	@OneToMany(mappedBy = "requestId",targetEntity = RequestsComments.class)
 	List<Requests> CommentList;
 
+	
+	@Transient
+	private int noOfRows;
+
+
+	public int getNoOfRows() {
+		return noOfRows;
+	}
+
 
 
 	@Transient
@@ -129,6 +138,8 @@ public class Requests {
 	public void setRequestDept(Department requestDept) {
 		this.requestDept = requestDept;
 	}
+
+	
 
 
 

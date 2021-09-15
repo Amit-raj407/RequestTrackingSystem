@@ -15,7 +15,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-6">
-			<h1>You are logged in as <span th:text="${user.firstName}"></span></h1>
+			<h1>You are logged in as <span th:text="${session.userName}"></span></h1>
 		</div>
 		<div class="col-md-6 d-flex flex-row-reverse">
 			<a th:href="@{/}" class="btn btn-warning">Logout</a>
@@ -23,7 +23,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12 text-center">
-			<a th:href="@{'/ChangePassword/' + ${user.userId}}">Update Password</a>
+			<a th:href="@{'/ChangePassword'}">Update Password</a>
 		</div>
 		<div class="col-md-12 text-center">
 			<a th:href="@{'/ChangeAnyPassword'}">Update Any Password</a>
@@ -35,7 +35,7 @@
 			<a th:href="@{'/Homepage'}">View All Request</a>
 		</div>
 		<div class="col-md-12 text-center">
-			<a th:href="@{'/Dept/'+ ${user.userId}}">Add Department</a>
+			<a th:href="@{'/Dept'}">Add Department</a>
 		</div>
 		
 	</div>

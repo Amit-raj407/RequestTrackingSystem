@@ -40,6 +40,7 @@ public class DeptServiceImpl implements DeptService {
 				msg = "Parent Department Doesn't Exist!! ";
 			}
 		}
+		
 		d = deptRepo.findAllByDeptCode(dept.getDeptCode());
 		
 		if(d.isEmpty()) {

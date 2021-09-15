@@ -1,9 +1,16 @@
 package com.project.RequestTrackingSystem.serviceImpl;
 
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+//import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.project.RequestTrackingSystem.models.Requests;
@@ -12,6 +19,8 @@ import com.project.RequestTrackingSystem.repos.DeptRepo;
 import com.project.RequestTrackingSystem.repos.RequestRepo;
 import com.project.RequestTrackingSystem.repos.SeqCounterRepo;
 import com.project.RequestTrackingSystem.services.RequestService;
+
+
 
 @Service
 public class RequestServiceImpl implements RequestService {
@@ -98,11 +107,62 @@ public class RequestServiceImpl implements RequestService {
 	}
 
 	public List<Requests> getAllRequests() {
-		List<Requests> allRequests = this.reqRepo.findAll();
+		List<Requests> allRequests = this.reqRepo.findAllByCreatedDateDesc();
 		return allRequests;
 	}
 
 	public Requests getRequestByID(int id) {
 		return this.reqRepo.getById(id);
 	}
+	
+	public long getTotalRows() {
+		return this.reqRepo.count();
+	}
+	
+	
+	
+//	public List<Requests> findRequestsWithSorting(String field) {
+//        return  reqRepo.findAll(Sort.by(Sort.Direction.ASC,field));
+//    }
+
+
+    public Page<Requests> findRequestsWithPagination(int offset, int pageSize) {
+        Page<Requests> request = reqRepo.findAll(PageRequest.of(offset, pageSize).withSort(Direction.DESC, "createdDate"));
+        return  request;
+    }
+    
+    
+    
+    public Page<Requests> findPaginated(Pageable pageable) {
+    	List<Requests> req = this.getAllRequests();
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Requests> list;
+
+        if (req.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, req.size());
+            list = req.subList(startItem, toIndex);
+        }
+
+        Page<Requests> reqPage
+          = new PageImpl<Requests>(list, PageRequest.of(currentPage, pageSize), req.size());
+
+        return reqPage;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+
+//    public Page<Requests> findRequestsWithPaginationAndSorting(int offset,int pageSize,String field) {
+//        Page<Requests> request = reqRepo.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field)));
+//        return  request;
+//    }
 }
