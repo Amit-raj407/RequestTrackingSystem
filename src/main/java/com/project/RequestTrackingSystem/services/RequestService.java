@@ -17,6 +17,10 @@ public interface RequestService {
 	public Page<Requests> findRequestsWithPagination(int offset,int pageSize);
 	public long getTotalRows();
 	
-	 public Page<Requests> findPaginated(Pageable pageable);
+	
+	public List<Requests> getReqs();
+	
+	
+	public Page<Requests> findPaginated(Pageable pageable);
 //	public Page<Requests> findRequestsWithPaginationAndSorting(int offset,int pageSize,String field);
 }

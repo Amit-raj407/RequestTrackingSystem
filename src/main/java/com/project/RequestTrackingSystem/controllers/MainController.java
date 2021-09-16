@@ -27,6 +27,8 @@ import com.project.RequestTrackingSystem.services.DeptService;
 import com.project.RequestTrackingSystem.services.RequestService;
 import com.project.RequestTrackingSystem.services.UserService;
 
+import dto.APIResponse;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -50,6 +52,7 @@ public class MainController {
 		
 		HttpSession session = request.getSession();
 		session.setAttribute("userId", null);
+		session.setAttribute("userName", null);
 		
 		
 		return "index";
@@ -60,13 +63,13 @@ public class MainController {
 		User argUser = userSvc.validate(user);
 		if (argUser.getMsg().compareTo("Login Successful") == 0) {
 			
-			HttpSession session = request.getSession();
+			HttpSession session = request.getSession(false);
 			session.setAttribute("userId", argUser.getUserId());
 			session.setAttribute("userName", argUser.getFirstName());
 			
 			System.out.println(session.getAttribute("userId"));
 			
-			return "dashboard";
+			return "redirect:/dashboard";
 		} else {
 			argUser.setIsInvalid(true);
 			// argUser.setMsg(argUser.getMsg());
@@ -76,13 +79,28 @@ public class MainController {
 		}
 	}
 
+	
+	
+	@GetMapping("/dashboard")
+	public String getDashboard(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession(false);
+		
+		if(session.getAttribute("userId") == null) {
+			return "redirect:/";
+		}
+		return "dashboard";
+	}
+	
+	
+	
 	@GetMapping("/ChangePassword")
 	public ModelAndView changePassword(Model model, HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("change_password");
 		
 		
 		HttpSession session = request.getSession(false);
-		System.out.println("In Dept: "+session.getAttribute("userId"));
+		System.out.println("In Change Password: "+session.getAttribute("userId"));
 		
 		
 		ChangePassword password = new ChangePassword();
@@ -145,20 +163,52 @@ public class MainController {
 		dept.setUserId((int) session.getAttribute("userId"));
 
 //		Get All Dept Codes to display in parent deptCode
-		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllDeptId();
+		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllParentDeptId();
 
 		model.addAttribute("deptIds", deptIdsAndCodes);
 		model.addAttribute("dept", dept);
 		return "Department";
 	}
+	
+	@GetMapping("/EditDept/{id}")
+	public ModelAndView showEditDeptPage(@PathVariable(name = "id") int id, HttpServletRequest request) {
+		
+		HttpSession session = request.getSession(false);
+		
+		
+		ModelAndView mav = new ModelAndView("EditDepartment");
+//		Product product = service.get(id);
+		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllParentDeptId();
+
+		Department dept = this.deptSvc.getByDeptId(id);
+		dept.setUserId((int) session.getAttribute("userId"));
+		mav.addObject("deptIds", deptIdsAndCodes);
+		mav.addObject("dept", dept);
+
+		return mav;
+	}
+	
+	@PostMapping("/editDept")
+	public String editDept(@ModelAttribute("dept") Department dept, Model model) {
+		System.out.println("Edit Dept"+ dept.getDeptId());
+		String msg = deptSvc.edit(dept);
+		System.out.println(msg);
+
+		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllParentDeptId();
+
+		model.addAttribute("deptIds", deptIdsAndCodes);
+		model.addAttribute("dept", dept);
+		model.addAttribute("message", msg);
+		return "Department";
+	}
 
 	@PostMapping("/saveDept")
 	public String saveDept(@ModelAttribute("dept") Department dept, Model model) {
-		System.out.println("Save Dept");
+		System.out.println("Save Dept"+ dept.getDeptId());
 		String msg = deptSvc.save(dept);
 		System.out.println(msg);
 
-		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllDeptId();
+		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllParentDeptId();
 
 		model.addAttribute("deptIds", deptIdsAndCodes);
 		model.addAttribute("dept", dept);
@@ -167,7 +217,14 @@ public class MainController {
 	}
 
 	@GetMapping("/CreateRequest")
-	public String getCreateRequest(Model model) {
+	public String getCreateRequest(Model model, HttpServletRequest req) {
+		
+		HttpSession session = req.getSession(false);
+		
+		if(session.getAttribute("userId") == null) {
+			return "redirect:/";
+		}		
+		
 		Requests request = new Requests();
 		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllDeptId();
 
@@ -249,8 +306,16 @@ public class MainController {
 //    }
 
 	@GetMapping(value = "/Homepage")
-	public String listBooks(Model model, @RequestParam("page") Optional<Integer> page,
+	public String listBooks(HttpServletRequest request, Model model, @RequestParam("page") Optional<Integer> page,
 			@RequestParam("size") Optional<Integer> size) {
+		
+		HttpSession session = request.getSession(false);
+		
+		if(session.getAttribute("userId") == null) {
+			return "redirect:/";
+		}
+		
+		
 		int currentPage = page.orElse(1);
 		int pageSize = size.orElse(8);
 
@@ -266,5 +331,18 @@ public class MainController {
 
 		return "Homepage";
 	}
+	
+	
+	 @GetMapping("/dtoGetReq")
+	    private String getAllRequests() {
+	        List<Requests> requests = this.reqSvc.getReqs();
+//	        return new APIResponse<>(requests.size(), requests);
+	        APIResponse<Object> api = new APIResponse<Object>(requests.size(), requests);
+	        System.out.println(api.getRecordCount());
+	        
+	       
+	        
+	        return "dashboard";
+	    }
 
 }

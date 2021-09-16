@@ -110,6 +110,11 @@ public class RequestServiceImpl implements RequestService {
 		List<Requests> allRequests = this.reqRepo.findAllByCreatedDateDesc();
 		return allRequests;
 	}
+	
+	
+	public List<Requests> getReqs() {
+		return this.reqRepo.findAll();
+	}
 
 	public Requests getRequestByID(int id) {
 		return this.reqRepo.getById(id);

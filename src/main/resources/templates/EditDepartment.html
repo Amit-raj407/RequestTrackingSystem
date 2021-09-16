@@ -40,12 +40,15 @@
 				<div class="head">
 					<h1 class="text-center">Manage Department</h1>
 				</div>
-				<form action="#" th:action="@{/saveDept}" th:object="${dept}"
+				<form action="#" th:action="@{/editDept}" th:object="${dept}"
 					method="post" autocomplete="off">
 					<div class="mb-3 mt-3">
 						<input type="hidden" th:field="*{userId}" class="form-control"
 							id="exampleFormControlInput1" readonly="readonly">
 					</div>
+					
+					<input type="hidden" name="" th:field="*{deptId}" readonly>
+					
 					<div class="mb-3 mt-3">
 						<input type="text" th:field="*{deptCode}" class="form-control"
 							id="DeptCode" placeholder="Department Code">
@@ -91,7 +94,7 @@
 							value="Save">
 					</div>
 					<div class="btn">
-						<a class="btn btn-danger" th:href="@{/dashboard}">Cancel</a>
+						<input type="reset" class="btn btn-danger" value="Cancel">
 					</div>
 				</form>
 				<div class="text-center text-danger" th:text="${message}"></div>

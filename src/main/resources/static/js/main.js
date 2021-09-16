@@ -74,7 +74,7 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
 
 
 
-document.getElementById("userName").addEventListener("keyup", () => {
+/*document.getElementById("userName").addEventListener("keyup", () => {
 	
 	document.getElementById("warning-msg").classList.add("alert");
 	document.getElementById("warning-msg").classList.add("alert-warning");
@@ -92,7 +92,7 @@ document.getElementById("userName").addEventListener("keyup", () => {
 		document.getElementById("btn-submit").style.opacity = 1;
 		document.getElementById("btn-submit").style.cursor = pointer;
 	}
-})
+})*/
 
 
 const togglePassword = document.querySelector('#togglePassword');
