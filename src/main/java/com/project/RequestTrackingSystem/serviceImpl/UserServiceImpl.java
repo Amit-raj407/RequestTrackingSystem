@@ -1,15 +1,30 @@
 package com.project.RequestTrackingSystem.serviceImpl;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.project.RequestTrackingSystem.models.ChangePassword;
+import com.project.RequestTrackingSystem.models.MailResponse;
 import com.project.RequestTrackingSystem.models.User;
 import com.project.RequestTrackingSystem.repos.UserRepo;
 import com.project.RequestTrackingSystem.services.UserService;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -268,5 +283,110 @@ public class UserServiceImpl implements UserService{
             return msg;
         }
     }
+	
+	
+//====================================================================================================================
+	
+	
+	
+	public String forgotPassword(User user) {
+
+		User argUser = this.userRepo.findByUserEmail(user.getUserEmail());
+		String msg;
+
+		if (argUser == null) {
+			msg = "Email doesn't exist";
+
+		} else {
+			msg = "A new password has been sent to your email";
+			String password = argUser.getFirstName() + getAlphaNumericString();
+			System.out.println(password);
+			//this.userRepo.updatePassword(argUser.getUserEmail(), password);
+			int stat = this.userRepo.updatePassword(argUser.getUserEmail(), password);
+			System.out.println(stat);
+			try {
+
+				Map<String, Object> model = new HashMap<>();
+				model.put("Name", argUser.getFirstName());
+				model.put("Password", password);
+				model.put("location", "Cozentus, Bhubaneswar");
+
+				this.sendEmail(model, argUser);
+
+			} catch (Exception e) {
+				System.out.println(e.toString());
+
+			}
+		}
+
+		return msg;
+
+	}
+
+	static String getAlphaNumericString() {
+
+		int n = 6;
+		// chose a Character random from this String
+		String AlphaNumericString = "@#$%^&*" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789"
+				+ "abcdefghijklmnopqrstuvxyz";
+
+		// create StringBuffer size of AlphaNumericString
+		StringBuilder sb = new StringBuilder(n);
+
+		for (int i = 0; i < n; i++) {
+
+			// generate a random number between
+			// 0 to AlphaNumericString variable length
+			int index = (int) (AlphaNumericString.length() * Math.random());
+
+			// add Character one by one in end of sb
+			sb.append(AlphaNumericString.charAt(index));
+		}
+
+		return sb.toString();
+	}
+
+	@Autowired
+	private JavaMailSender sender;
+
+	@Autowired
+	private Configuration config;
+
+	public MailResponse sendEmail(Map<String, Object> model, User user) {
+		// TODO Auto-generated method stub
+		MailResponse response = new MailResponse();
+		MimeMessage message = sender.createMimeMessage();
+		try {
+			// set mediaType
+			MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+					StandardCharsets.UTF_8.name());
+
+			Template t = config.getTemplate("reset-template.ftl");
+			String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
+			// System.out.println("inside mail");
+//			helper.setTo("sritik.dash51@gmail.com");
+			helper.setTo(user.getUserEmail());
+			// System.out.println(user.getUserEmail());
+			helper.setText(html, true);
+			helper.setSubject("Reset Password");
+			// helper.setFrom("sritik.dash51@gmail.com");
+
+			sender.send(message);
+
+//			response.setMessage("mail send to : " + "Sritik");
+			response.setMessage("mail send to : " + user.getFirstName());
+			response.setStatus(Boolean.TRUE);
+
+			// System.out.println(response.getMessage());
+
+		} catch (MessagingException | IOException | TemplateException e) {
+			response.setMessage("Mail Sending failure : " + e.getMessage());
+			response.setStatus(Boolean.FALSE);
+		}
+
+		return response;
+
+	}
+	
 
 }
