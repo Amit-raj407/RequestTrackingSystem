@@ -1,6 +1,7 @@
 package com.project.RequestTrackingSystem.models;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -36,6 +37,13 @@ public class Requests {
 	
 	
 	
+	@Column(name="assigned_date")
+	private LocalDate assignedDate;
+	
+	
+
+
+
 	@Column(name="initial_comments")
 	private String initialComments;
 	
@@ -116,6 +124,18 @@ public class Requests {
 	public void setAssignedTo(String assignedTo) {
 		this.assignedTo = assignedTo;
 	}
+	
+	
+	
+	
+	public LocalDate getAssignedDate() {
+		return assignedDate;
+	}
+
+	public void setAssignedDate(LocalDate assignedDate) {
+		this.assignedDate = assignedDate;
+	}
+
 	
 	public String getInitialComments() {
 		return initialComments;
