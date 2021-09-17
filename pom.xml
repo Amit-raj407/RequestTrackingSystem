@@ -14,7 +14,7 @@
 	<name>RequestTrackingSystem</name>
 	<description>Training Project for Cozentus</description>
 	<properties>
-		<java.version>16.0.2</java.version>
+		<java.version>16</java.version>
 	</properties>
 	<dependencies>
 	
