@@ -344,5 +344,25 @@ public class MainController {
 	        
 	        return "dashboard";
 	    }
+	 
+	 //========================================================================================
+	 
+	 
+	 @GetMapping("/reset")
+		public String serveResetPassword(Model model) {
+			User user = new User();
+			model.addAttribute("user", user);
+			return "resetPassword";
+		}
+		
+		
+		@PostMapping("/reset")
+		public String resetPassword(@ModelAttribute("user") User user) {
+			
+			String str = this.userSvc.forgotPassword(user);
+			
+			return "redirect:/";
+		}
+	 
 
 }

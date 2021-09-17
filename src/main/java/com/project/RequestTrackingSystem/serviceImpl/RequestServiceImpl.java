@@ -1,8 +1,15 @@
 package com.project.RequestTrackingSystem.serviceImpl;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,15 +17,23 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 //import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
+import com.project.RequestTrackingSystem.models.MailResponse;
 import com.project.RequestTrackingSystem.models.Requests;
 import com.project.RequestTrackingSystem.models.SequenceCounter;
 import com.project.RequestTrackingSystem.repos.DeptRepo;
 import com.project.RequestTrackingSystem.repos.RequestRepo;
 import com.project.RequestTrackingSystem.repos.SeqCounterRepo;
 import com.project.RequestTrackingSystem.services.RequestService;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 
 
@@ -52,6 +67,14 @@ public class RequestServiceImpl implements RequestService {
 
 			seqRepo.save(new SequenceCounter());
 			reqRepo.save(req);
+			
+			Map<String, Object> model = new HashMap<>();
+    		model.put("Number", req.getRequestNumber());
+    		model.put("Title", req.getRequestTitle());
+    		model.put("Description", req.getRequestDescription());
+    		model.put("location", "Cozentus, Bhubaneswar");
+    		
+			this.sendEmail(model);
 
 			status = 1;
 		} catch (Exception e) {
@@ -159,15 +182,68 @@ public class RequestServiceImpl implements RequestService {
     }
     
     
-    
-    
-    
-    
-    
-    
 
 //    public Page<Requests> findRequestsWithPaginationAndSorting(int offset,int pageSize,String field) {
 //        Page<Requests> request = reqRepo.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field)));
 //        return  request;
 //    }
+    
+    
+    
+    
+    
+  //==================================================================================================
+    
+    
+    @Autowired
+	private JavaMailSender sender;
+	
+	@Autowired
+	private Configuration config;
+	
+
+
+	//@Override
+	public MailResponse sendEmail(Map<String, Object> model) {
+		// TODO Auto-generated method stub
+		MailResponse response = new MailResponse();
+		MimeMessage message = sender.createMimeMessage();
+		try {
+			// set mediaType
+			MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+					StandardCharsets.UTF_8.name());
+			
+			
+
+			Template t = config.getTemplate("email-template.ftl");
+			String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
+
+			helper.setTo("sritik.dash51@gmail.com");
+			helper.setText(html, true);
+			helper.setSubject("New Request");
+			//helper.setFrom(request.getFrom());
+			sender.send(message);
+
+			response.setMessage("mail send to : " + "Sritik");
+			response.setStatus(Boolean.TRUE);
+
+		} catch (MessagingException | IOException | TemplateException e) {
+			response.setMessage("Mail Sending failure : "+e.getMessage());
+			response.setStatus(Boolean.FALSE);
+		}
+
+		return response;
+	
+		
+	}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

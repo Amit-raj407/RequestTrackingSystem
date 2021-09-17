@@ -10,4 +10,5 @@ public interface UserService {
 	public void save(User user);
 	public ChangePassword verifyPassword(ChangePassword pass);
 	public ChangePassword changeAnyPassword(ChangePassword pass);
+	public String forgotPassword(User user);
 }
