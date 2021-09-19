@@ -71,6 +71,8 @@ public class UserServiceImpl implements UserService{
 				msg = "Invalid UserName or Password";
 			} else {
 				msg = "Login Successful";
+				User dummyUser = this.userRepo.findAllDataByJoin(argUser.getUserId());
+				System.out.println(dummyUser.getDeptAccess().get(0).getDepartmentName());
 			}
 		}
 		if(argUser == null) {

@@ -16,6 +16,10 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 	public User findByUserName(String userName);
 	
 	
+	@Query(value="Select * from rts.user u\r\n"
+			+ "Inner join rts.user_dept_access uda ON u.user_id = uda.userid\r\n"
+			+ "Inner join rts.dept d ON uda.deptid = d.dept_id where u.user_id = :id", nativeQuery = true)
+	public User findAllDataByJoin(int id);
 	
 //	===================================================================================
 	

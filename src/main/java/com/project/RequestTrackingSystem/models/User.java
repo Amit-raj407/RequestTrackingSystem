@@ -1,13 +1,21 @@
 package com.project.RequestTrackingSystem.models;
 
+
+
 import java.time.LocalDate;
+import java.util.List;
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -18,7 +26,7 @@ import javax.persistence.Transient;
 @Table(name="user")
 public class User {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="user_id")
 	private int userId;
 	@Column(name="username")
@@ -41,6 +49,25 @@ public class User {
 	@Column(name="is_user_active")
 	private Boolean userActive;
 	
+	
+//	Joining User and Dept Many to Many using joining table user_dept_access
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "user_dept_access",
+			joinColumns = @JoinColumn(name = "userid"),
+			inverseJoinColumns = @JoinColumn(name = "deptid"))
+	List<Department> deptAccess;
+	
+	
+	
+	
+	public List<Department> getDeptAccess() {
+		return deptAccess;
+	}
+	public void setDeptAccess(List<Department> deptAccess) {
+		this.deptAccess = deptAccess;
+	}
 	@Transient
 	private Boolean isInvalid = false;
 	

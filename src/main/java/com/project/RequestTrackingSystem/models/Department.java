@@ -2,11 +2,12 @@ package com.project.RequestTrackingSystem.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -40,18 +41,15 @@ public class Department {
 	List<Requests> reqList;
 	
 	
+//	Joining User and Dept Many to Many using joining table user_dept_access
+	
+	@ManyToMany(mappedBy = "deptAccess", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	List<User> users;
+	
 	@Transient
 	private int userId;
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	public List<Requests> getReqList() {
 		return reqList;
 	}

@@ -1,7 +1,7 @@
 package com.project.RequestTrackingSystem.models;
 
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
 
 @Entity
 @Table(name="requests")
@@ -38,7 +39,7 @@ public class Requests {
 	
 	
 	@Column(name="assigned_date")
-	private LocalDate assignedDate;
+	private Date assignedDate = new Date();
 	
 	
 
@@ -128,11 +129,11 @@ public class Requests {
 	
 	
 	
-	public LocalDate getAssignedDate() {
+	public Date getAssignedDate() {
 		return assignedDate;
 	}
 
-	public void setAssignedDate(LocalDate assignedDate) {
+	public void setAssignedDate(Date assignedDate) {
 		this.assignedDate = assignedDate;
 	}
 

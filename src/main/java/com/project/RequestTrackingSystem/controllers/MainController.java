@@ -49,26 +49,39 @@ public class MainController {
 	public String serveLogin(Model model, HttpServletRequest request) {
 		User user = new User();
 		model.addAttribute("user", user);
-		
-		HttpSession session = request.getSession();
-		session.setAttribute("userId", null);
-		session.setAttribute("userName", null);
-		
-		
+
 		return "index";
+	}
+
+	@GetMapping("/logout")
+	public String logOut(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+//		session.setAttribute("userId", null);
+//		session.setAttribute("userName", null);
+		try {
+			session.invalidate();
+		} catch(Exception e) {
+			System.out.println(e.toString());
+			return "redirect:/";
+		}
+		
+		
+		System.out.println(request.getSession(false));
+		return "redirect:/";
 	}
 
 	@PostMapping("/Login")
 	public String login(@ModelAttribute("user") User user, Model model, HttpServletRequest request) {
 		User argUser = userSvc.validate(user);
 		if (argUser.getMsg().compareTo("Login Successful") == 0) {
-			
-			HttpSession session = request.getSession(false);
+
+			HttpSession session = request.getSession();
 			session.setAttribute("userId", argUser.getUserId());
 			session.setAttribute("userName", argUser.getFirstName());
-			
+
 			System.out.println(session.getAttribute("userId"));
-			
+			System.out.println(request.getSession(false));
+
 			return "redirect:/dashboard";
 		} else {
 			argUser.setIsInvalid(true);
@@ -79,36 +92,34 @@ public class MainController {
 		}
 	}
 
-	
-	
 	@GetMapping("/dashboard")
 	public String getDashboard(HttpServletRequest request) {
-		
+
 		HttpSession session = request.getSession(false);
-		
-		if(session.getAttribute("userId") == null) {
+//		System.out.println("ID" + session.getAttribute("userId"));
+		if (session == null) {
 			return "redirect:/";
 		}
 		return "dashboard";
 	}
-	
-	
-	
+
 	@GetMapping("/ChangePassword")
 	public ModelAndView changePassword(Model model, HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("change_password");
-		
-		
+
 		HttpSession session = request.getSession(false);
-		System.out.println("In Change Password: "+session.getAttribute("userId"));
-		
-		
+		System.out.println("In Change Password: " + session.getAttribute("userId"));
+
+//		if(session.getAttribute("userId") == null) {
+//			ModelAndView login = new ModelAndView("index");
+//			User user = new User();
+//			mav.addObject("user", user);
+//			return login;
+//		}
+
 		ChangePassword password = new ChangePassword();
 		password.setUserId((int) session.getAttribute("userId"));
-		
-		
-		
-		
+
 		mav.addObject("password", password);
 
 		return mav;
@@ -145,21 +156,17 @@ public class MainController {
 
 	@GetMapping("/Dept")
 	public String serveDepartment(Model model, HttpServletRequest request) {
-		
-		
-		
-		
+
 		Department dept = new Department();
-		
-		
+
 		HttpSession session = request.getSession(false);
-		
-		if(session.getAttribute("userId") == null) {
+
+		if (session == null) {
 			return "redirect:/";
 		}
-		
-		System.out.println("In Dept: "+session.getAttribute("userId"));
-		
+
+		System.out.println("In Dept: " + session.getAttribute("userId"));
+
 		dept.setUserId((int) session.getAttribute("userId"));
 
 //		Get All Dept Codes to display in parent deptCode
@@ -169,13 +176,12 @@ public class MainController {
 		model.addAttribute("dept", dept);
 		return "Department";
 	}
-	
+
 	@GetMapping("/EditDept/{id}")
 	public ModelAndView showEditDeptPage(@PathVariable(name = "id") int id, HttpServletRequest request) {
-		
+
 		HttpSession session = request.getSession(false);
-		
-		
+
 		ModelAndView mav = new ModelAndView("EditDepartment");
 //		Product product = service.get(id);
 		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllParentDeptId();
@@ -187,10 +193,10 @@ public class MainController {
 
 		return mav;
 	}
-	
+
 	@PostMapping("/editDept")
 	public String editDept(@ModelAttribute("dept") Department dept, Model model) {
-		System.out.println("Edit Dept"+ dept.getDeptId());
+		System.out.println("Edit Dept" + dept.getDeptId());
 		String msg = deptSvc.edit(dept);
 		System.out.println(msg);
 
@@ -204,7 +210,7 @@ public class MainController {
 
 	@PostMapping("/saveDept")
 	public String saveDept(@ModelAttribute("dept") Department dept, Model model) {
-		System.out.println("Save Dept"+ dept.getDeptId());
+		System.out.println("Save Dept" + dept.getDeptId());
 		String msg = deptSvc.save(dept);
 		System.out.println(msg);
 
@@ -218,13 +224,13 @@ public class MainController {
 
 	@GetMapping("/CreateRequest")
 	public String getCreateRequest(Model model, HttpServletRequest req) {
-		
+
 		HttpSession session = req.getSession(false);
-		
-		if(session.getAttribute("userId") == null) {
+
+		if (session == null) {
 			return "redirect:/";
-		}		
-		
+		}
+
 		Requests request = new Requests();
 		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllDeptId();
 
@@ -308,14 +314,13 @@ public class MainController {
 	@GetMapping(value = "/Homepage")
 	public String listBooks(HttpServletRequest request, Model model, @RequestParam("page") Optional<Integer> page,
 			@RequestParam("size") Optional<Integer> size) {
-		
+
 		HttpSession session = request.getSession(false);
-		
-		if(session.getAttribute("userId") == null) {
+
+		if (session == null) {
 			return "redirect:/";
 		}
-		
-		
+
 		int currentPage = page.orElse(1);
 		int pageSize = size.orElse(8);
 
@@ -331,38 +336,50 @@ public class MainController {
 
 		return "Homepage";
 	}
-	
-	
-	 @GetMapping("/dtoGetReq")
-	    private String getAllRequests(Model model) {
-	        List<Requests> requests = this.reqSvc.getReqs();
+
+	@GetMapping("/dtoGetReq")
+	private String getAllRequests(Model model) {
+		List<Requests> requests = this.reqSvc.getReqs();
 //	        return new APIResponse<>(requests.size(), requests);
-	        APIResponse<Object> api = new APIResponse<Object>(requests.size(), requests);
-	        System.out.println(api.getRecordCount());
-	        
-	       model.addAttribute("req", api.getResponse());
-	        
-	        return "DTO";
-	    }
-	 
-	 //========================================================================================
-	 
-	 
-	 @GetMapping("/reset")
-		public String serveResetPassword(Model model) {
-			User user = new User();
-			model.addAttribute("user", user);
-			return "resetPassword";
-		}
+		APIResponse<Object> api = new APIResponse<Object>(requests.size(), requests);
+		System.out.println(api.getRecordCount());
+
+		model.addAttribute("req", api.getResponse());
+
+		return "DTO";
+	}
+
+	// ========================================================================================
+
+	@GetMapping("/reset")
+	public String serveResetPassword(Model model) {
+		User user = new User();
+		model.addAttribute("user", user);
+		return "resetPassword";
+	}
+
+	@PostMapping("/reset")
+	public String resetPassword(@ModelAttribute("user") User user, Model model) {
+
+		String msg = this.userSvc.forgotPassword(user);
+		model.addAttribute("user", user);
+		model.addAttribute("message",msg);
+		return "resetPassword";
+	}
+	
+	
+	@GetMapping("/ManageUser")
+	public String manageUser(Model model, HttpServletRequest request) {
 		
-		
-		@PostMapping("/reset")
-		public String resetPassword(@ModelAttribute("user") User user) {
-			
-			String str = this.userSvc.forgotPassword(user);
-			
+		HttpSession session = request.getSession(false);
+
+		if (session == null) {
 			return "redirect:/";
 		}
-	 
+		
+		User user = new User();
+		model.addAttribute("user", user);
+		return "ManageUser";
+	}
 
 }
