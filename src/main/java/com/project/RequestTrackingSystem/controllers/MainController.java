@@ -334,15 +334,15 @@ public class MainController {
 	
 	
 	 @GetMapping("/dtoGetReq")
-	    private String getAllRequests() {
+	    private String getAllRequests(Model model) {
 	        List<Requests> requests = this.reqSvc.getReqs();
 //	        return new APIResponse<>(requests.size(), requests);
 	        APIResponse<Object> api = new APIResponse<Object>(requests.size(), requests);
 	        System.out.println(api.getRecordCount());
 	        
-	       
+	       model.addAttribute("req", api.getResponse());
 	        
-	        return "dashboard";
+	        return "DTO";
 	    }
 	 
 	 //========================================================================================
