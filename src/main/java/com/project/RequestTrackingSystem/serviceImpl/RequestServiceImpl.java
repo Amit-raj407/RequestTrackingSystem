@@ -166,25 +166,7 @@ public class RequestServiceImpl implements RequestService {
     
     
     
-    public Page<Requests> findPaginated(Pageable pageable) {
-    	List<Requests> req = this.getAllRequests();
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<Requests> list;
-
-        if (req.size() < startItem) {
-            list = Collections.emptyList();
-        } else {
-            int toIndex = Math.min(startItem + pageSize, req.size());
-            list = req.subList(startItem, toIndex);
-        }
-
-        Page<Requests> reqPage
-          = new PageImpl<Requests>(list, PageRequest.of(currentPage, pageSize), req.size());
-
-        return reqPage;
-    }
+    
     
     
 
@@ -244,7 +226,72 @@ public class RequestServiceImpl implements RequestService {
 		
 	}
     
-    
+	public List<Requests> getMyRequests(int userId) {
+		return this.reqRepo.findAllByCreatedByOrderByAssignedDateDesc(userRepo.getById(userId));
+	}
+	
+	public List<Requests> getMyTasks(int userId) {
+		return this.reqRepo.findAllByAssignedToOrderByAssignedDateDesc(userRepo.getById(userId));
+	}
+	
+	
+	public Page<Requests> findPaginated(Pageable pageable) {
+    	List<Requests> req = this.getAllRequests();
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Requests> list;
+
+        if (req.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, req.size());
+            list = req.subList(startItem, toIndex);
+        }
+
+        Page<Requests> reqPage
+          = new PageImpl<Requests>(list, PageRequest.of(currentPage, pageSize), req.size());
+
+        return reqPage;
+    }
+	
+	
+	
+	
+//	
+//	Stats = 0 ===============>>>>>>>>>>>>  GetMyRequests
+//	Stats = AnyOther ===============>>>>>>>>>>>>  GetMyTasks
+//	
+	public Page<Requests> findPaginatedByUserId(Pageable pageable, int userId, int stats) {
+    	
+		List<Requests> req;
+		
+		
+		if(stats == 0) {
+			req = this.getMyRequests(userId);
+		} else {
+			req = this.getMyTasks(userId);
+		}
+		
+		
+		
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Requests> list;
+
+        if (req.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, req.size());
+            list = req.subList(startItem, toIndex);
+        }
+
+        Page<Requests> reqPage
+          = new PageImpl<Requests>(list, PageRequest.of(currentPage, pageSize), req.size());
+
+        return reqPage;
+    }
     
     
     

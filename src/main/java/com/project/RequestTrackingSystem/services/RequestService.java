@@ -23,4 +23,8 @@ public interface RequestService {
 	
 	public Page<Requests> findPaginated(Pageable pageable);
 //	public Page<Requests> findRequestsWithPaginationAndSorting(int offset,int pageSize,String field);
+	
+	
+//	public List<Requests> getMyRequests(int userId);
+	public Page<Requests> findPaginatedByUserId(Pageable pageable, int userId, int stats); 
 }

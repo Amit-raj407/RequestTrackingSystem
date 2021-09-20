@@ -111,14 +111,16 @@ public class MainController {
 		ModelAndView mav = new ModelAndView("change_password");
 
 		HttpSession session = request.getSession(false);
+		
+		
 		System.out.println("In Change Password: " + session.getAttribute("userId"));
 
-//		if(session.getAttribute("userId") == null) {
-//			ModelAndView login = new ModelAndView("index");
-//			User user = new User();
-//			mav.addObject("user", user);
-//			return login;
-//		}
+		if(session.getAttribute("userId") == null) {
+			ModelAndView login = new ModelAndView("index");
+			User user = new User();
+			mav.addObject("user", user);
+			return login;
+		}
 
 		ChangePassword password = new ChangePassword();
 		password.setUserId((int) session.getAttribute("userId"));
@@ -342,6 +344,9 @@ public class MainController {
 			List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
 			model.addAttribute("pageNumbers", pageNumbers);
 		}
+		
+		String str = "Homepage";
+		model.addAttribute("Page", str);
 
 		return "Homepage";
 	}
@@ -430,5 +435,82 @@ public class MainController {
 		return new ResponseEntity<List<UserDept>>(this.userSvc.getAllUsersByDept(deptId) ,HttpStatus.OK);
 	}
 	
+	
+	
+	@GetMapping("/MyRequests")
+	public String getMyRequests(Model model, HttpServletRequest request, @RequestParam("page") Optional<Integer> page,
+			@RequestParam("size") Optional<Integer> size) {
+		
+		HttpSession session = request.getSession(false);
+
+		if (session == null) {
+			return "redirect:/";
+		}
+		
+		int currentPage = page.orElse(1);
+		int pageSize = size.orElse(8);
+
+		int userId = (int) session.getAttribute("userId");
+		
+		Page<Requests> reqPage = this.reqSvc.findPaginatedByUserId(PageRequest.of(currentPage - 1, pageSize), userId, 0);
+
+		model.addAttribute("reqPage", reqPage);
+
+		int totalPages = reqPage.getTotalPages();
+		if (totalPages > 0) {
+			List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+			model.addAttribute("pageNumbers", pageNumbers);
+		}
+
+		
+		
+//		List<Requests> reqPage = this.reqSvc.findPaginatedByUserId(userId);
+		
+		
+		model.addAttribute("Page", "MyRequests");
+		
+		
+		
+		return "Homepage";
+		
+	}
+	
+	@GetMapping("/MyTasks")
+	public String getMyTasks(Model model, HttpServletRequest request, @RequestParam("page") Optional<Integer> page,
+			@RequestParam("size") Optional<Integer> size) {
+		
+		HttpSession session = request.getSession(false);
+
+		if (session == null) {
+			return "redirect:/";
+		}
+		
+		int currentPage = page.orElse(1);
+		int pageSize = size.orElse(8);
+
+		int userId = (int) session.getAttribute("userId");
+		
+		Page<Requests> reqPage = this.reqSvc.findPaginatedByUserId(PageRequest.of(currentPage - 1, pageSize), userId, 1);
+
+		model.addAttribute("reqPage", reqPage);
+
+		int totalPages = reqPage.getTotalPages();
+		if (totalPages > 0) {
+			List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+			model.addAttribute("pageNumbers", pageNumbers);
+		}
+
+		
+		
+//		List<Requests> reqPage = this.reqSvc.findPaginatedByUserId(userId);
+		
+		model.addAttribute("Page", "MyTasks");
+		
+		
+		
+		
+		return "Homepage";
+		
+	}
 	
 }
