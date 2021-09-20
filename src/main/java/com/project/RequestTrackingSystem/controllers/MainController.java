@@ -23,6 +23,7 @@ import com.project.RequestTrackingSystem.models.ChangePassword;
 import com.project.RequestTrackingSystem.models.Department;
 import com.project.RequestTrackingSystem.models.Requests;
 import com.project.RequestTrackingSystem.models.User;
+import com.project.RequestTrackingSystem.models.UserDept;
 import com.project.RequestTrackingSystem.services.DeptService;
 import com.project.RequestTrackingSystem.services.RequestService;
 import com.project.RequestTrackingSystem.services.UserService;
@@ -31,6 +32,8 @@ import dto.APIResponse;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @Controller
 public class MainController {
@@ -381,5 +384,9 @@ public class MainController {
 		model.addAttribute("user", user);
 		return "ManageUser";
 	}
-
+	
+	@GetMapping("/getAllUsersByDept")
+	public ResponseEntity<List<UserDept>> getAllUsersByDept(@RequestParam(name = "deptId") int deptId) {
+		return new ResponseEntity<List<UserDept>>(this.userSvc.getAllUsersByDept(deptId) ,HttpStatus.OK);
+	}
 }

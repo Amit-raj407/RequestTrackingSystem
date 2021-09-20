@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 
 @Entity
@@ -44,6 +46,7 @@ public class Department {
 //	Joining User and Dept Many to Many using joining table user_dept_access
 	
 	@ManyToMany(mappedBy = "deptAccess", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	List<User> users;
 	
 	@Transient

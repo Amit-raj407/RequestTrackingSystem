@@ -19,6 +19,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 
 
@@ -57,6 +59,7 @@ public class User {
 			name = "user_dept_access",
 			joinColumns = @JoinColumn(name = "userid"),
 			inverseJoinColumns = @JoinColumn(name = "deptid"))
+	@JsonManagedReference
 	List<Department> deptAccess;
 	
 	

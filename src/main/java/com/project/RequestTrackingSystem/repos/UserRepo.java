@@ -1,5 +1,7 @@
 package com.project.RequestTrackingSystem.repos;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,5 +35,13 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 //	@Query("Update User u set u.userPassword = :password where u.email = :email")
 //	public void updatePassword(String email, String password);
 	
+	
+	
+	
+	@Query(value="Select * from rts.dept d\r\n"
+			+ "Inner join rts.user_dept_access uda ON d.dept_id = uda.deptid\r\n"
+			+ "Inner join rts.user u On u.user_id = uda.userid\r\n"
+			+ "where d.dept_id = :deptId", nativeQuery = true)
+	public List<User> getAllUsersByDeptId(int deptId);
 	
 }

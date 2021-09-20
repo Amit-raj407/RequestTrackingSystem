@@ -96,3 +96,57 @@ document.getElementById("btn-submit").addEventListener("click", (e) => {
 	}
 
 });
+
+
+
+
+
+//=======================================================================================
+
+var req = new XMLHttpRequest();
+
+document.getElementById("deptSelect").addEventListener("change", (e) => {
+	let deptId = document.getElementById("deptSelect").value;
+	console.log(deptId);
+	var reqUrl = 'http://localhost:9090/getAllUsersByDept?deptId='+deptId;
+    console.log(reqUrl);
+    req.onreadystatechange = getResponse;
+    req.open('GET', reqUrl);
+    req.send();
+})
+
+function getResponse() {
+    // const cityList = document.querySelector('#cityList');
+    // cityList.innerHTML = ''
+    if(req.readyState == 4 && req.status == 200) {
+        var jsonData = JSON.parse(req.responseText);
+        console.log(jsonData);
+        // for(var i = 0; i < jsonData.length; i++) {
+        //     console.log(jsonData[i].name);
+        //     cityList.appendChild(createCityList(jsonData[i].name));
+        // }
+		const selectBox = document.getElementById("userSelect");
+		
+		/*for(var i = 0; i < jsonData.length; i++) {
+			var newOption = document.createElement('option');
+			console.log("hi");
+			console.log(jsonData);
+			newOption.value = jsonData.key;
+			newOption.text = jsonData.value;
+			selectBox.appendChild(newOption);
+		}*/
+
+		for(data in jsonData) {
+
+			var newOption = document.createElement('option');
+			
+			
+			newOption.value = jsonData[data].userName;
+			newOption.text = jsonData[data].userName;
+			selectBox.appendChild(newOption);
+
+
+			console.log(jsonData[data].userName)
+		}
+    }
+}

@@ -2,7 +2,9 @@ package com.project.RequestTrackingSystem.serviceImpl;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,8 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.project.RequestTrackingSystem.models.ChangePassword;
+
 import com.project.RequestTrackingSystem.models.MailResponse;
 import com.project.RequestTrackingSystem.models.User;
+import com.project.RequestTrackingSystem.models.UserDept;
 import com.project.RequestTrackingSystem.repos.UserRepo;
 import com.project.RequestTrackingSystem.services.UserService;
 
@@ -390,5 +394,24 @@ public class UserServiceImpl implements UserService{
 
 	}
 	
+	
+	
+	public List<UserDept> getAllUsersByDept(int deptId) {
+		List<User> argUser = this.userRepo.getAllUsersByDeptId(deptId);
+//		TreeMap<Integer, String> userAndIds = new TreeMap<Integer, String>();
+		/*
+		 * TreeMap<Integer, String> treeMapDeptCodes = new TreeMap<Integer, String>();
+
+		for (Department codes : getAllDept) {
+
+			treeMapDeptCodes.put(codes.getDeptId(), codes.getDeptCode());
+		}
+ */
+		List<UserDept> ud = new ArrayList<UserDept>();
+		for(User userRow : argUser) {
+			ud.add(new UserDept(userRow.getUserId(), userRow.getFirstName()));
+		}
+		return ud;
+	}
 
 }
