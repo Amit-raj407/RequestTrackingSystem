@@ -235,6 +235,7 @@ public class MainController {
 		}
 
 		Requests request = new Requests();
+		
 		TreeMap<Integer, String> deptIdsAndCodes = deptSvc.getAllDeptId();
 
 		model.addAttribute("deptIds", deptIdsAndCodes);
@@ -243,10 +244,15 @@ public class MainController {
 	}
 
 	@PostMapping("/saveRequest")
-	public String saveRqst(@ModelAttribute("request") Requests request, Model model) {
+	public String saveRqst(@ModelAttribute("request") Requests request, Model model, HttpServletRequest req) {
 		System.out.println("Save Request");
+		HttpSession session = req.getSession(false);
+		
+		request.setAssignedUser((int) session.getAttribute("userId"));
+		
+		
 		int status = this.reqSvc.saveRequest(request);
-
+		
 		if (status == 1) {
 			return "redirect:/Homepage";
 		} else {
@@ -315,7 +321,7 @@ public class MainController {
 //    }
 
 	@GetMapping(value = "/Homepage")
-	public String listBooks(HttpServletRequest request, Model model, @RequestParam("page") Optional<Integer> page,
+	public String listRequests(HttpServletRequest request, Model model, @RequestParam("page") Optional<Integer> page,
 			@RequestParam("size") Optional<Integer> size) {
 
 		HttpSession session = request.getSession(false);
@@ -385,8 +391,44 @@ public class MainController {
 		return "ManageUser";
 	}
 	
+	@PostMapping("/saveUser")
+	public String saveUser(Model model, @ModelAttribute("user") User user) {
+		System.out.println("User Saved");
+		this.userSvc.save(user);
+		return "redirect:/ViewUsers";
+	}
+	
+	
+	@GetMapping("/ViewUsers")
+	public String listUsers(HttpServletRequest request, Model model, @RequestParam("page") Optional<Integer> page,
+			@RequestParam("size") Optional<Integer> size) {
+
+		HttpSession session = request.getSession(false);
+
+		if (session == null) {
+			return "redirect:/";
+		}
+
+		int currentPage = page.orElse(1);
+		int pageSize = size.orElse(8);
+
+		Page<User> userPage = this.userSvc.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+
+		model.addAttribute("userPage", userPage);
+
+		int totalPages = userPage.getTotalPages();
+		if (totalPages > 0) {
+			List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+			model.addAttribute("pageNumbers", pageNumbers);
+		}
+
+		return "ViewUsers";
+	}
+	
 	@GetMapping("/getAllUsersByDept")
 	public ResponseEntity<List<UserDept>> getAllUsersByDept(@RequestParam(name = "deptId") int deptId) {
 		return new ResponseEntity<List<UserDept>>(this.userSvc.getAllUsersByDept(deptId) ,HttpStatus.OK);
 	}
+	
+	
 }

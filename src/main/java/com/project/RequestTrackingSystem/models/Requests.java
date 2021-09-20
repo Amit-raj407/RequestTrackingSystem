@@ -33,8 +33,15 @@ public class Requests {
 	@Column(name="request_description")
 	private String requestDescription;
 	
-	@Column(name="assigned_to")
-	private String assignedTo;
+	
+	
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name="assigned_to")
+	private User assignedTo;
+	
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name="created_by")
+	private User createdBy;
 	
 	
 	
@@ -42,17 +49,10 @@ public class Requests {
 	private Date assignedDate = new Date();
 	
 	
-
-
-
 	@Column(name="initial_comments")
 	private String initialComments;
 	
 	
-	
-	@Column(name="created_by")
-	private String createdBy = "Amit";
-
 	@ManyToOne(targetEntity = Department.class)
 	@JoinColumn(name="request_dept")
 	private Department requestDept;
@@ -63,14 +63,11 @@ public class Requests {
 	List<Requests> CommentList;
 
 	
+	
 	@Transient
-	private int noOfRows;
+	private int assignedUser;
 
-
-	public int getNoOfRows() {
-		return noOfRows;
-	}
-
+	
 
 
 	@Transient
@@ -81,6 +78,30 @@ public class Requests {
 
 
 	
+	public User getAssignedTo() {
+		return assignedTo;
+	}
+
+	public User getCreatedBy() {
+		return createdBy;
+	}
+
+	public List<Requests> getCommentList() {
+		return CommentList;
+	}
+
+	public void setAssignedTo(User assignedTo) {
+		this.assignedTo = assignedTo;
+	}
+
+	public void setCreatedBy(User createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public void setCommentList(List<Requests> commentList) {
+		CommentList = commentList;
+	}
+
 	public static String getSeqNum() {
 		return seqNum;
 	}
@@ -119,12 +140,7 @@ public class Requests {
 	public void setRequestDescription(String requestDescription) {
 		this.requestDescription = requestDescription;
 	}
-	public String getAssignedTo() {
-		return assignedTo;
-	}
-	public void setAssignedTo(String assignedTo) {
-		this.assignedTo = assignedTo;
-	}
+	
 	
 	
 	
@@ -145,12 +161,7 @@ public class Requests {
 		this.initialComments = initialComments;
 	}
 	
-	public String getCreatedBy() {
-		return createdBy;
-	}
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
+	
 
 	public Department getRequestDept() {
 		return requestDept;
@@ -159,6 +170,16 @@ public class Requests {
 	public void setRequestDept(Department requestDept) {
 		this.requestDept = requestDept;
 	}
+
+	public int getAssignedUser() {
+		return assignedUser;
+	}
+
+	public void setAssignedUser(int assignedUser) {
+		this.assignedUser = assignedUser;
+	}
+
+	
 
 	
 

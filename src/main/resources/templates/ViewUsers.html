@@ -17,7 +17,7 @@
 		<img id="logo" th:src="@{/img/Cozentus-Logo.png}" alt="Cozentus-Logo">
 	</div>
 	<div class="container-fluid main">
-		<h1 class="text-center bg-light mb-3">Request Management Home</h1>
+		<h1 class="text-center bg-light mb-3">User Management</h1>
 		<div class="row">
 			<!-- <div class="col-md-9 d-flex flex-row-reverse "></div>
 			<div class="col-md-3 mb-3">
@@ -25,7 +25,7 @@
 					placeholder="Search..">
 			</div> -->
 			<div class="col-md-3">
-				<a class="btn btn-primary btn-sm" th:href="@{/CreateRequest}">Create Request</a>
+				<a class="btn btn-primary btn-sm" th:href="@{/ManageUser}">Create User</a>
 			</div>
 			<div class="col-md-6"></div>
 			<div class="col-md-3">
@@ -36,25 +36,29 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th scope="col">Request Number</th>
-					<th scope="col">Request Title</th>
-					<th scope="col">Status</th>
-					<th scope="col">Assigned_to</th>
-					<th scope="col">Last_Updated_Date</th>
-					<th scope="col">Request Age</th>
+					<th scope="col">User ID</th>
+					<th scope="col">User Name</th>
+					<th scope="col">User FirstName</th>
+					<th scope="col">User LastName</th>
+					<th scope="col">User Email</th>
+					<th scope="col">Created Date</th>
+					<th scope="col">Created By</th>
+					<th scope="col">Is User Active</th>
 
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="req, iStat : ${reqPage.content}">
+				<tr th:each="req, iStat : ${userPage.content}">
 					<!-- <td th:text="${req.requestNumber}" /> -->
-					<td><a th:text="${req.requestNumber}" th:href="@{'/EditRequest/' + ${req.requestId}}"></a></td>
+					<td><a th:text="${req.userId}" th:href="@{'/EditRequest/' + ${req.userId}}"></a></td>
 					<!-- <td><a th:text="${req.requestNumber}"></a></td> -->
-					<td th:text="${req.requestTitle}" />
-					<td>Pending(Static)</td>
-					<td th:text="${req.assignedTo.firstName}">Mark</td>
-					<td th:text="${req.assignedDate}"></td>
-					<td>Yet to be Done</td>
+					<td th:text="${req.userName}" />
+					<td th:text="${req.firstName}">Mark</td>
+					<td th:text="${req.lastName}"></td>
+					<td th:text="${req.userEmail}"></td>
+					<td th:text="${req.createdBy}" />
+					<td th:text="${req.createdDate}"></td>
+					<td th:text="${req.userActive}"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -69,8 +73,8 @@
 
 		<nav aria-label="...">
 			<ul class="pagination pagination-sm">
-				<li class="page-item" th:if="${reqPage.totalPages > 0}" th:each="pageNumber : ${pageNumbers}">
-					<a th:href="@{/Homepage(size=${reqPage.size}, page=${pageNumber})}" th:text=${pageNumber}
+				<li class="page-item" th:if="${userPage.totalPages > 0}" th:each="pageNumber : ${pageNumbers}">
+					<a th:href="@{/ViewUsers(size=${userPage.size}, page=${pageNumber})}" th:text=${pageNumber}
 						class="page-link"></a>
 				</li>
 			</ul>

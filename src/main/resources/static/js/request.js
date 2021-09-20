@@ -135,13 +135,19 @@ function getResponse() {
 			newOption.text = jsonData.value;
 			selectBox.appendChild(newOption);
 		}*/
-
+		while (selectBox.lastElementChild) {
+				selectBox.removeChild(selectBox.lastElementChild);
+		}
+		
+		
 		for(data in jsonData) {
+
+			
 
 			var newOption = document.createElement('option');
 			
 			
-			newOption.value = jsonData[data].userName;
+			newOption.value = jsonData[data].userId;
 			newOption.text = jsonData[data].userName;
 			selectBox.appendChild(newOption);
 

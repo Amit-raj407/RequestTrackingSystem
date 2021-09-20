@@ -29,6 +29,7 @@ import com.project.RequestTrackingSystem.models.SequenceCounter;
 import com.project.RequestTrackingSystem.repos.DeptRepo;
 import com.project.RequestTrackingSystem.repos.RequestRepo;
 import com.project.RequestTrackingSystem.repos.SeqCounterRepo;
+import com.project.RequestTrackingSystem.repos.UserRepo;
 import com.project.RequestTrackingSystem.services.RequestService;
 
 import freemarker.template.Configuration;
@@ -40,6 +41,9 @@ import freemarker.template.TemplateException;
 @Service
 public class RequestServiceImpl implements RequestService {
 
+	@Autowired
+	UserRepo userRepo;
+	
 	@Autowired
 	RequestRepo reqRepo;
 
@@ -54,6 +58,8 @@ public class RequestServiceImpl implements RequestService {
 
 		System.out.println(req);
 		System.out.print(req.getRequestTitle() + req.getRequestDept() + req.getRequestNumber());
+		
+		req.setCreatedBy(this.userRepo.getById(req.getAssignedUser()));
 
 		// deptRepo.findById(req.getRequestDept()).get().getDeptCode();
 
@@ -62,7 +68,6 @@ public class RequestServiceImpl implements RequestService {
 
 		int seqCounter = seqRepo.getSeqNumber();
 		req.setRequestNumber(this.buildReqNumber(deptRepo.findById(req.getRequestDept().getDeptId()).get().getDeptCode(), seqCounter));
-
 		try {
 
 			seqRepo.save(new SequenceCounter());
@@ -74,7 +79,7 @@ public class RequestServiceImpl implements RequestService {
     		model.put("Description", req.getRequestDescription());
     		model.put("location", "Cozentus, Bhubaneswar");
     		
-			this.sendEmail(model);
+			this.sendEmail(model, req.getAssignedTo().getUserEmail());
 
 			status = 1;
 		} catch (Exception e) {
@@ -204,7 +209,7 @@ public class RequestServiceImpl implements RequestService {
 
 
 	//@Override
-	public MailResponse sendEmail(Map<String, Object> model) {
+	public MailResponse sendEmail(Map<String, Object> model, String email) {
 		// TODO Auto-generated method stub
 		MailResponse response = new MailResponse();
 		MimeMessage message = sender.createMimeMessage();
@@ -218,19 +223,21 @@ public class RequestServiceImpl implements RequestService {
 			Template t = config.getTemplate("email-template.ftl");
 			String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
-			helper.setTo("sritik.dash51@gmail.com");
+			helper.setTo(email);
+			System.out.println(email);
 			helper.setText(html, true);
 			helper.setSubject("New Request");
 			//helper.setFrom(request.getFrom());
 			sender.send(message);
 
-			response.setMessage("mail send to : " + "Sritik");
+			response.setMessage("mail sent");
 			response.setStatus(Boolean.TRUE);
 
 		} catch (MessagingException | IOException | TemplateException e) {
 			response.setMessage("Mail Sending failure : "+e.getMessage());
 			response.setStatus(Boolean.FALSE);
 		}
+		System.out.println(response.getMessage());
 
 		return response;
 	

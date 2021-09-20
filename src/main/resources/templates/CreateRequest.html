@@ -44,7 +44,7 @@
                
                 <div class="col-md-9">
                     <select class="form-select" name="" th:field="*{requestDept}" id="deptSelect">
-                    	<option th:value="none">-Select-</option>
+                    	
                         <option th:each="id : ${deptIds}" th:text = "${id.value}" th:value="${id.key}"></option> 
                     </select>
                 </div>
@@ -55,7 +55,6 @@
                 </div>
                 <div class="col-md-9">
                     <select class="form-select" th:field="*{assignedTo}" name="" id="userSelect">
-                        <option value="none">-Select-</option>
                         
                     </select>
                 </div>

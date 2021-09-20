@@ -2,7 +2,7 @@ package com.project.RequestTrackingSystem.models;
 
 
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 
@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -45,9 +46,9 @@ public class User {
 	@Column(name="user_password")
 	private String userPassword;
 	@Column(name="created_date")
-	private LocalDate createdDate;
+	private Date createdDate = new Date();
 	@Column(name="created_by")
-	private String createdBy;
+	private String createdBy = "Admin";
 	@Column(name="is_user_active")
 	private Boolean userActive;
 	
@@ -62,6 +63,14 @@ public class User {
 	@JsonManagedReference
 	List<Department> deptAccess;
 	
+	
+	@OneToMany(mappedBy = "assignedTo", targetEntity = Requests.class)
+	List<Requests> assignedList;
+	
+	
+	
+	@OneToMany(mappedBy = "createdBy", targetEntity = Requests.class)
+	List<Requests> createdList;
 	
 	
 	
@@ -125,10 +134,10 @@ public class User {
 		this.userPassword = userPassword;
 	}
 	
-	public LocalDate getCreatedDate() {
+	public Date getCreatedDate() {
 		return createdDate;
 	}
-	public void setCreatedDate(LocalDate createdDate) {
+	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 	public void setCreatedBy(String createdBy) {
@@ -149,6 +158,18 @@ public class User {
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	public List<Requests> getAssignedList() {
+		return assignedList;
+	}
+	public List<Requests> getCreatedList() {
+		return createdList;
+	}
+	public void setAssignedList(List<Requests> assignedList) {
+		this.assignedList = assignedList;
+	}
+	public void setCreatedList(List<Requests> createdList) {
+		this.createdList = createdList;
 	}
 	
 	
